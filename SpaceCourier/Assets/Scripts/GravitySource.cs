@@ -42,7 +42,7 @@ public class GravitySource : MonoBehaviour {
 
 	private void OnDrawGizmos() {
 
-        Gizmos.DrawWireSphere(transform.position, RB.mass * areaMultiplier);
+        //Gizmos.DrawWireSphere(transform.position, RB.mass * areaMultiplier);
 
         if (sizeFromMass)
             transform.localScale = Vector3.one * RB.mass;
