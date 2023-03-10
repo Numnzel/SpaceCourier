@@ -16,7 +16,6 @@ public class Ship : MonoBehaviour {
 
     public void Move(Vector2 dir) {
 
-		
 		Vector3 force = transform.forward * dir.y * Time.deltaTime;
         force *= dir.y > 0 ? impulseForward : impulseBackward;
         Vector3 torque = transform.up * dir.x * impulseTorque * Time.deltaTime;
