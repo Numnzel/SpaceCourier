@@ -21,10 +21,6 @@ public class Controller : MonoBehaviour {
             Destroy(gameObject);
     }
 
-	private void Start() {
-		
-	}
-
 	// Update is called once per frame
 	void Update() {
 
@@ -38,7 +34,7 @@ public class Controller : MonoBehaviour {
     private void HandleMovement() {
 
         ship.Move(desiredDirection);
-	}
+    }
 
     public void OnMove(InputAction.CallbackContext context) {
 

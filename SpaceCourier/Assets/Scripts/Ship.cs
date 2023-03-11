@@ -6,30 +6,55 @@ using UnityEngine;
 public class Ship : MonoBehaviour {
 
     Rigidbody RB;
-    [SerializeField] float impulseForward;
-    [SerializeField] float impulseTorque;
-    [SerializeField] float impulseBackward;
     [SerializeField] Powered powered;
+    [SerializeField] private int impulseForward;
+    [SerializeField] private int impulseTorque;
+    [SerializeField] private int impulseBackward;
+    [SerializeField] private float forceMultiplier;
+    [SerializeField] private int passiveEnergyConsumption;
 
-	void Awake() {
+    private int usedEForward;
+    private int usedESideward;
+    private int usedETotal;
+
+    const int usedEnergyIndicatorMax = 30;
+
+    void Awake() {
 
         RB = GetComponent<Rigidbody>();
     }
 
-    public void Move(Vector2 dir) {
+	private void Update() {
 
-		if (powered.Energy == 0)
-            return;
+        // Consume energy
+        int usedEPassive = powered.Remove(Mathf.Min(passiveEnergyConsumption, powered.Energy));
 
-		Vector3 force = transform.forward * dir.y * Time.deltaTime;
-        force *= dir.y > 0 ? impulseForward : impulseBackward;
-        Vector3 torque = transform.up * dir.x * impulseTorque * Time.deltaTime;
+        // Calculate consumed energy
+        usedETotal = usedEForward + usedESideward + usedEPassive;
 
-        RB.AddForce(force, ForceMode.Force);
-        RB.AddTorque(torque, ForceMode.Force);
+        // Update UI
+        UIManager.instance.UpdateEnergyBar(powered.Energy, powered.MaxEnergy);
+        UIManager.instance.UpdateImpulseBar(usedETotal, usedEnergyIndicatorMax);
+    }
 
-        powered.Add(-Mathf.RoundToInt(force.magnitude + torque.magnitude));
+	public void Move(Vector2 dir) {
 
-        Debug.Log(powered.Energy);
-	}
+        // Calculate forward/backward force
+        float impulseVertical = dir.y > 0 ? impulseForward : impulseBackward;
+        impulseVertical *= Time.deltaTime * dir.y;
+
+        usedEForward = powered.Remove(Mathf.CeilToInt(Mathf.Abs(impulseVertical)));
+        Vector3 force = transform.forward * usedEForward * dir.y;
+
+        // Calculate sideward force
+        float impulseSides = impulseTorque;
+        impulseSides *= Time.deltaTime * dir.x;
+
+        usedESideward = powered.Remove(Mathf.CeilToInt(Mathf.Abs(impulseSides)));
+        Vector3 torque = transform.up * usedESideward * dir.x;
+
+        // Apply forces
+        RB.AddForce(force * forceMultiplier, ForceMode.Force);
+        RB.AddTorque(torque * forceMultiplier, ForceMode.Force);
+    }
 }
