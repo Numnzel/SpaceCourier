@@ -12,8 +12,10 @@ public class Ship : MonoBehaviour {
     [SerializeField] private int impulseBackward;
     [SerializeField] private float impulseMultiplier;
     [SerializeField] private GameObject truckModel;
+    [SerializeField] private GameObject truckLoad;
 
-    private bool dead = false;
+    public bool dead = false;
+    public int loadCount;
 
     void Awake() {
 
@@ -24,6 +26,9 @@ public class Ship : MonoBehaviour {
 
         if (powered.disabled)
             SetDead();
+
+        if (loadCount == 0)
+            truckLoad.transform.localScale = Vector3.zero;
 	}
 
 	public void Move(Vector2 dir) {
