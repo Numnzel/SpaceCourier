@@ -10,7 +10,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private int impulseForward;
     [SerializeField] private int impulseTorque;
     [SerializeField] private int impulseBackward;
-    [SerializeField] private float forceMultiplier;
+    [SerializeField] private float impulseMultiplier;
     [SerializeField] private GameObject truckModel;
 
     private bool dead = false;
@@ -46,8 +46,8 @@ public class Ship : MonoBehaviour {
         Vector3 torque = transform.up * usedESideward * dir.x;
 
         // Apply forces
-        RB.AddForce(force * forceMultiplier, ForceMode.Force);
-        RB.AddTorque(torque * forceMultiplier, ForceMode.Force);
+        RB.AddForce(force * impulseMultiplier, ForceMode.Force);
+        RB.AddTorque(torque * impulseMultiplier, ForceMode.Force);
     }
 
 	private void OnCollisionEnter(Collision collision) {
