@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour {
 
     [SerializeField] Canvas canvas;
     [SerializeField] Image energyBar;
+    [SerializeField] Image freezeBar;
     [SerializeField] Image impulseBar;
 
     void Awake() {
@@ -33,5 +34,10 @@ public class UIManager : MonoBehaviour {
     public void UpdateImpulseBar(float value, float max) {
 
         UpdateBar(impulseBar, value, max);
+    }
+
+    public void UpdateFreezeBar(float value, float max) {
+
+        UpdateBar(freezeBar, value, max);
     }
 }
