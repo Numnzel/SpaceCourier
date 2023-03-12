@@ -31,7 +31,7 @@ public class GravitySource : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 
-        if (!other.attachedRigidbody.isKinematic)
+        if (other.GetComponent<Rigidbody>() && !other.attachedRigidbody.isKinematic)
             RBs.Add(other.attachedRigidbody);
 	}
 
