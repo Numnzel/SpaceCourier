@@ -6,16 +6,17 @@ using UnityEngine;
 public class GravitySource : MonoBehaviour {
 
     private List<Rigidbody> RBs;
-    [SerializeField] Rigidbody RB;
-    [SerializeField] private SphereCollider area;
-    [SerializeField] private float areaMultiplier = 10;
-    [SerializeField] bool sizeFromMass;
+    [SerializeField] private Rigidbody RB;
+    [SerializeField] private SphereCollider triggerSphere;
+    [SerializeField] private float areaMultiplier;
+    [SerializeField] private float gForceMultiplier;
+    [SerializeField] private bool sizeFromMass;
 
     void Awake() {
 
         RBs = new List<Rigidbody>();
 
-        if (area == null) {
+        if (triggerSphere == null) {
 
             Debug.LogWarning("This " + gameObject.name + " has no collider.");
             return;
@@ -24,13 +25,13 @@ public class GravitySource : MonoBehaviour {
         if (sizeFromMass)
             transform.localScale = Vector3.one * RB.mass;
 
-        area.radius = RB.mass * areaMultiplier;
-        area.isTrigger = true;
+        triggerSphere.radius = (RB.mass * areaMultiplier) / transform.localScale.x;
+        triggerSphere.isTrigger = true;
     }
 
 	private void OnTriggerEnter(Collider other) {
 
-		if (!other.attachedRigidbody.isKinematic)
+        if (!other.attachedRigidbody.isKinematic)
             RBs.Add(other.attachedRigidbody);
 	}
 
@@ -41,8 +42,9 @@ public class GravitySource : MonoBehaviour {
 	}
 
 	private void OnDrawGizmos() {
-
-        //Gizmos.DrawWireSphere(transform.position, RB.mass * areaMultiplier);
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, RB.mass * areaMultiplier);
 
         if (sizeFromMass)
             transform.localScale = Vector3.one * RB.mass;
@@ -56,7 +58,7 @@ public class GravitySource : MonoBehaviour {
             float gForce = (this.RB.mass * RB.mass) / (dist * dist);
             Vector3 dir = new Vector3(transform.position.x - RB.transform.position.x, 0, transform.position.z - RB.transform.position.z);
 
-            RB.AddForce(dir.normalized * gForce, ForceMode.Force);
+            RB.AddForce(dir.normalized * gForce * gForceMultiplier * Time.deltaTime, ForceMode.Force);
         }
     }
 }

@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] Image energyBar;
     [SerializeField] Image freezeBar;
     [SerializeField] Image impulseBar;
+    [SerializeField] Image solarBar;
 
     void Awake() {
 
@@ -29,6 +30,11 @@ public class UIManager : MonoBehaviour {
 	public void UpdateEnergyBar(float value, float max) {
 
         UpdateBar(energyBar, value, max);
+    }
+
+    public void UpdateSolarBar(float value, float max) {
+
+        UpdateBar(solarBar, value, max);
     }
 
     public void UpdateImpulseBar(float value, float max) {

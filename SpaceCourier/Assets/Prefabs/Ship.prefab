@@ -217,11 +217,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: {fileID: 6403819699508734151}
-  impulseForward: 2500
-  impulseTorque: 1500
-  impulseBackward: 1500
+  impulseForward: 3000
+  impulseTorque: 1000
+  impulseBackward: 1000
   forceMultiplier: 0.1
-  passiveEnergyConsumption: 1
   truckModel: {fileID: 6061732706540853217}
 --- !u!114 &6403819699508734151
 MonoBehaviour:
@@ -235,8 +234,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8521c37ee47c3db4ca937d60c78d96a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 50000
-  maxEnergy: 50000
+  energy: 15000
+  maxEnergy: 15000
+  freezes: 1
+  passiveEnergyConsumption: 10
 --- !u!1001 &6403819699002485424
 PrefabInstance:
   m_ObjectHideFlags: 0
