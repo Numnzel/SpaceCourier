@@ -40,4 +40,20 @@ public class Controller : MonoBehaviour {
 
         desiredDirection = context.ReadValue<Vector2>();
 	}
+
+    public void ToggleMenu(InputAction.CallbackContext context) {
+
+		if (context.started)
+            GameManager.instance.ToggleMenu();
+	}
+    public void ToggleOptions(InputAction.CallbackContext context) {
+
+        if (context.started)
+            GameManager.instance.ToggleOptions();
+    }
+    public void EnterMenuOrReturn(InputAction.CallbackContext context) {
+
+        if (context.started)
+            GameManager.instance.EnterMenuOrReturn();
+    }
 }

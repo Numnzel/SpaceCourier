@@ -60,6 +60,8 @@ public class Ship : MonoBehaviour {
         powered.RemoveEnergy(100000);
         powered.disabled = true;
         truckModel.transform.localScale = Vector3.zero;
+        RB.velocity = Vector3.zero;
+        RB.isKinematic = true;
         // spawn explosion
 
         SetDead();
