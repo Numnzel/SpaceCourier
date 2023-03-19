@@ -13,9 +13,16 @@ public class Ship : MonoBehaviour {
     [SerializeField] private float impulseMultiplier;
     [SerializeField] private GameObject truckModel;
     [SerializeField] private GameObject truckLoad;
+    [SerializeField] private List<GameObject> truckFlamesForwards;
+    [SerializeField] private List<GameObject> truckFlamesBackwards;
+    [SerializeField] private List<GameObject> truckFlamesTurnRight;
+    [SerializeField] private List<GameObject> truckFlamesTurnLeft;
 
     public bool dead = false;
     public int loadCount;
+
+    const float smallFlameBaseScale = 50.0f;
+    const float largeFlameBaseScale = 130.0f;
 
     void Awake() {
 
@@ -53,6 +60,9 @@ public class Ship : MonoBehaviour {
         // Apply forces
         RB.AddForce(force * impulseMultiplier, ForceMode.Force);
         RB.AddTorque(torque * impulseMultiplier, ForceMode.Force);
+
+        // Apply SFX (Flames)
+        SetFlames(usedEForward * dir.y, usedESideward * dir.x);
     }
 
 	private void OnCollisionEnter(Collision collision) {
@@ -60,6 +70,7 @@ public class Ship : MonoBehaviour {
         powered.RemoveEnergy(100000);
         powered.disabled = true;
         truckModel.transform.localScale = Vector3.zero;
+        SetFlames(0, 0);
         RB.velocity = Vector3.zero;
         RB.isKinematic = true;
         // spawn explosion
@@ -70,5 +81,24 @@ public class Ship : MonoBehaviour {
     private void SetDead() {
 
         dead = true;
+    }
+
+    private void SetFlames(float force, float torque) {
+
+        float tremblingValue = Mathf.Sin(Time.time / 100) + 0.7f;
+        float tremblingForce = force * tremblingValue;
+        float tremblingTorque = torque * tremblingValue;
+
+        foreach (GameObject flame in truckFlamesForwards)
+            flame.transform.localScale = Vector3.one * Mathf.Min(largeFlameBaseScale * 1.0f, largeFlameBaseScale * Mathf.Max(0, tremblingForce / 9));
+
+        foreach (GameObject flame in truckFlamesBackwards)
+            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale * 1.2f, smallFlameBaseScale * Mathf.Max(0, -tremblingForce / 3));
+
+        foreach (GameObject flame in truckFlamesTurnRight)
+            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale * 1.2f, smallFlameBaseScale * Mathf.Max(0, tremblingTorque / 3));
+
+        foreach (GameObject flame in truckFlamesTurnLeft)
+            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale * 1.2f, smallFlameBaseScale * Mathf.Max(0, -tremblingTorque / 3));
     }
 }
