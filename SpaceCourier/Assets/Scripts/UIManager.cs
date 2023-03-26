@@ -16,9 +16,10 @@ public class UIManager : MonoBehaviour {
 
     void Awake() {
 
-        if (instance == null)
+        if (instance == null) {
+            DontDestroyOnLoad(gameObject);
             instance = this;
-        else
+        } else
             Destroy(gameObject);
     }
 

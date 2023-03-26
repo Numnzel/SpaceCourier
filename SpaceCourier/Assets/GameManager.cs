@@ -10,71 +10,78 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField] private CanvasGroup canvasMenu;
     [SerializeField] private CanvasGroup canvasOptions;
+    [SerializeField] private CanvasGroup canvasTitle;
+    [SerializeField] private CanvasGroup canvasGame;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
+    [SerializeField] private ScenesManager scenesManager;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
-    private Dictionary<CanvasGroup, bool> canvasGroupsStatus = new Dictionary<CanvasGroup, bool>();
+
+    const int titleSceneIndex = 0;
 
     void Awake() {
 
-        if (instance == null)
+        if (instance == null) {
+            DontDestroyOnLoad(gameObject);
             instance = this;
-        else
+        } else
             Destroy(gameObject);
     }
 
 	private void Start() {
 
-		canvasGroupsStatus.Add(canvasMenu, true);
-		canvasGroupsStatus.Add(canvasOptions, true);
-	}
+        //scenesManager.SetCurrentScene(titleSceneIndex);
+        ShowCanvasGroup(canvasTitle);
+    }
 
     public void EnterMenuOrReturn() {
 
-        if (canvasFocus.Count == 0)
-            ToggleMenu();
+        if (!canvasFocus.Contains(canvasMenu) && !canvasFocus.Contains(canvasTitle))
+            ShowMenu();
         else
-            EscapeFocus();
+            HideCanvasGroup();
 	}
-    public void EscapeFocus() { SetCanvasGroup(canvasFocus.Peek(), false); }
-	public void ToggleMenu() { ToogleCanvasGroup(canvasMenu); }
-	public void ToggleOptions() { ToogleCanvasGroup(canvasOptions); }
 
-    public void ToogleCanvasGroup(CanvasGroup canvasGroup) {
+	public void ShowMenu() {
+        
+        if (scenesManager.GetCurrentScene().buildIndex != titleSceneIndex)
+            ShowCanvasGroup(canvasMenu);
+    }
+	
+    public void ShowOptions() { ShowCanvasGroup(canvasOptions); }
+    public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
+
+    public void ShowCanvasGroup(CanvasGroup canvasGroup) {
 
         if (canvasGroup == null)
             return;
 
-        bool status;
-        if (canvasGroupsStatus.TryGetValue(canvasGroup, out status)) {
-
-            canvasGroupsStatus[canvasGroup] = !status;
-            EnableCanvasGroup(canvasGroup, status);
-        }
+        UIUtils.SetCanvasGroup(canvasGroup, true);
+        canvasFocus.Push(canvasGroup);
     }
+    
+    public void HideCanvasGroup() {
 
-    public void SetCanvasGroup(CanvasGroup canvasGroup, bool set) {
-
-        if (canvasGroup == null)
+        if (canvasFocus.Count <= 1)
             return;
 
-        bool status;
-        if (canvasGroupsStatus.TryGetValue(canvasGroup, out status)) {
-
-            canvasGroupsStatus[canvasGroup] = !set;
-            EnableCanvasGroup(canvasGroup, set);
-        }
+        UIUtils.SetCanvasGroup(canvasFocus.Peek(), false);
+        canvasFocus.Pop();
     }
 
-    private void EnableCanvasGroup(CanvasGroup canvasGroup, bool set) {
-
-        UIUtils.EnableCanvasGroup(canvasGroup, set);
-
-        // Update focus of the canvas
-        if (!canvasGroupsStatus[canvasGroup])
-            canvasFocus.Push(canvasGroup);
-        else
+    private void HideAllCanvasGroup() {
+        
+        while (canvasFocus.Count > 0) {
+            
+            UIUtils.SetCanvasGroup(canvasFocus.Peek(), false);
             canvasFocus.Pop();
+        }
+    }
+
+    public void SetMainCanvas(CanvasGroup canvasGroup) {
+
+        HideAllCanvasGroup();
+        ShowCanvasGroup(canvasGroup);
     }
 
     public void SetMinimapAlpha(Single value) {
@@ -86,5 +93,32 @@ public class GameManager : MonoBehaviour {
     private void SetImageAlpha(RawImage image, float value) {
 
         UIUtils.SetImageAlpha(ref image, value);
+    }
+
+    public void LoadScene(int loadingSceneIndex) {
+
+        int currentSceneIndex = scenesManager.GetCurrentScene().buildIndex;
+
+        if (loadingSceneIndex == titleSceneIndex) {
+            scenesManager.UnloadScene(currentSceneIndex);
+            //scenesManager.SetCurrentScene(titleSceneIndex);
+            SetMainCanvas(canvasTitle);
+        }
+        else {
+            
+            if (currentSceneIndex != titleSceneIndex)
+                scenesManager.UnloadScene(currentSceneIndex);
+            
+            scenesManager.LoadScene(loadingSceneIndex);
+            //scenesManager.SetCurrentScene(loadingSceneIndex);
+            SetMainCanvas(canvasGame);
+        }
+	}
+
+    public void RestartScene() {
+
+        int currentSceneIndex = scenesManager.GetCurrentScene().buildIndex;
+
+        LoadScene(currentSceneIndex);
     }
 }

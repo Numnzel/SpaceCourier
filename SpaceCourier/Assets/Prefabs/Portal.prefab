@@ -95,7 +95,7 @@ MonoBehaviour:
   triggerSphere: {fileID: 264307691232423324}
   minimapSprite: {fileID: 264307691765594845}
   openedSprite: {fileID: 21300000, guid: e6f2a572d520e364689fb7c41a30c974, type: 3}
-  ship: {fileID: 0}
+  shipPrefab: {fileID: 6403819699508734149, guid: 536780cf13becd54fad33fdd0fd029c1, type: 3}
   particles: {fileID: 264307691509078231}
 --- !u!1 &264307691445371211
 GameObject:

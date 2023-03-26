@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6403819697897040748}
   - component: {fileID: 6403819697897040750}
   m_Layer: 0
-  m_Name: Courier
+  m_Name: Ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,8 +259,8 @@ Transform:
   m_GameObject: {fileID: 6403819699508734146}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6403819699078517483}
   - {fileID: 6403819698053758606}
@@ -309,10 +309,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: {fileID: 6403819699508734151}
-  impulseForward: 3000
-  impulseTorque: 1000
-  impulseBackward: 1000
-  impulseMultiplier: 0.3
+  baseImpulseForward: 3000
+  baseImpulseTorque: 1000
+  baseImpulseBackward: 1000
+  baseImpulseMultiplier: 0.3
   truckModel: {fileID: 6061732706540853217}
   truckLoad: {fileID: 6004023544369060052}
   truckFlamesForwards:
@@ -327,6 +327,7 @@ MonoBehaviour:
   - {fileID: 154863808097070184}
   - {fileID: 4800760692992396599}
   dead: 0
+  initialLoadCount: 1
   loadCount: 1
 --- !u!114 &6403819699508734151
 MonoBehaviour:

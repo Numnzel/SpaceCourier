@@ -14,7 +14,7 @@ public class Powered : MonoBehaviour {
     private Coroutine updateAveragesCR;
     private Coroutine freezeCR;
 
-    private int freezeRate;
+    private int freezeAmount;
     private int averageEnergyGain;
     private int averageEnergyLoss;
 
@@ -37,7 +37,7 @@ public class Powered : MonoBehaviour {
             RemoveEnergy(passiveEnergyConsumption);
 
             if (energy > unfreezeEnergyThreshold)
-                freezeRate = Mathf.Max(0, freezeRate-1);
+                freezeAmount = Mathf.Max(0, freezeAmount-1);
         }
 
         if (freezes && !disabled)
@@ -53,7 +53,7 @@ public class Powered : MonoBehaviour {
 
             yield return new WaitForSeconds(0.01f);
 
-            if (++freezeRate >= freezeMaximum)
+            if (++freezeAmount >= freezeMaximum)
                 disabled = true;
         }
 
@@ -89,7 +89,7 @@ public class Powered : MonoBehaviour {
         UIManager.instance.UpdateEnergyBar(energy, maxEnergy);
         UIManager.instance.UpdateImpulseBar(averageEnergyLoss, usedEnergyIndicatorMax);
         UIManager.instance.UpdateSolarBar(averageEnergyGain, usedEnergyIndicatorMax);
-        UIManager.instance.UpdateFreezeBar(freezeRate, freezeMaximum);
+        UIManager.instance.UpdateFreezeBar(freezeAmount, freezeMaximum);
     }
 
     public bool SetEnergy(int value) {

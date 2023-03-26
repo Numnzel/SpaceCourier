@@ -4,10 +4,21 @@ using UnityEngine;
 
 public class CameraSystem : MonoBehaviour {
 
-    public GameObject followed;
+	private static CameraSystem instance;
+    internal GameObject followed;
 
-	private void Update() {
+    void Awake() {
 
-		transform.position = followed.transform.position;
+        if (instance == null) {
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+        } else
+            Destroy(gameObject);
+    }
+
+    private void Update() {
+
+        if (followed != null)
+		    transform.position = followed.transform.position;
 	}
 }

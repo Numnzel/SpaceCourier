@@ -5,12 +5,11 @@ using UnityEngine;
 [RequireComponent (typeof(Powered))]
 public class Ship : MonoBehaviour {
 
-    Rigidbody RB;
     [SerializeField] Powered powered;
-    [SerializeField] private int impulseForward;
-    [SerializeField] private int impulseTorque;
-    [SerializeField] private int impulseBackward;
-    [SerializeField] private float impulseMultiplier;
+    [SerializeField] private int baseImpulseForward;
+    [SerializeField] private int baseImpulseTorque;
+    [SerializeField] private int baseImpulseBackward;
+    [SerializeField] private float baseImpulseMultiplier;
     [SerializeField] private GameObject truckModel;
     [SerializeField] private GameObject truckLoad;
     [SerializeField] private List<GameObject> truckFlamesForwards;
@@ -19,7 +18,10 @@ public class Ship : MonoBehaviour {
     [SerializeField] private List<GameObject> truckFlamesTurnLeft;
 
     public bool dead = false;
+    public int initialLoadCount;
     public int loadCount;
+
+    private Rigidbody RB;
 
     const float smallFlameBaseScale = 50.0f;
     const float largeFlameBaseScale = 130.0f;
@@ -44,28 +46,34 @@ public class Ship : MonoBehaviour {
             return;
 
         // Calculate forward/backward force
-        float impulseVertical = dir.y > 0 ? impulseForward : impulseBackward;
+        float impulseVertical = dir.y > 0 ? baseImpulseForward : baseImpulseBackward;
         impulseVertical *= Time.deltaTime * dir.y;
 
         int usedEForward = powered.RemoveEnergy(Mathf.CeilToInt(Mathf.Abs(impulseVertical)));
         Vector3 force = transform.forward * usedEForward * dir.y;
 
         // Calculate sideward force
-        float impulseSides = impulseTorque;
+        float impulseSides = baseImpulseTorque;
         impulseSides *= Time.deltaTime * dir.x;
 
         int usedESideward = powered.RemoveEnergy(Mathf.CeilToInt(Mathf.Abs(impulseSides)));
         Vector3 torque = transform.up * usedESideward * dir.x;
 
         // Apply forces
-        RB.AddForce(force * impulseMultiplier, ForceMode.Force);
-        RB.AddTorque(torque * impulseMultiplier, ForceMode.Force);
+        RB.AddForce(force * baseImpulseMultiplier, ForceMode.Force);
+        RB.AddTorque(torque * baseImpulseMultiplier, ForceMode.Force);
 
         // Apply SFX (Flames)
         SetFlames(usedEForward * dir.y, usedESideward * dir.x);
     }
 
 	private void OnCollisionEnter(Collision collision) {
+
+        Crash();
+        SetDead();
+    }
+
+    private void Crash() {
 
         powered.RemoveEnergy(100000);
         powered.disabled = true;
@@ -74,8 +82,6 @@ public class Ship : MonoBehaviour {
         RB.velocity = Vector3.zero;
         RB.isKinematic = true;
         // spawn explosion
-
-        SetDead();
     }
 
     private void SetDead() {

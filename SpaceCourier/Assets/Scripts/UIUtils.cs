@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public static class UIUtils {
 
-	public static void EnableCanvasGroup(CanvasGroup canvasGroup, bool enable) {
+	public static void SetCanvasGroup(CanvasGroup canvasGroup, bool enable) {
 
 		canvasGroup.alpha = enable ? 1.0f : 0.0f;
 		canvasGroup.interactable = enable;

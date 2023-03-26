@@ -7,17 +7,18 @@ public class Controller : MonoBehaviour {
 
     public static Controller instance;
 
-    [SerializeField] Ship ship;
-    [SerializeField] CameraSystem cameraSystem;
+    private Ship ship;
+    [SerializeField] private CameraSystem cameraSystem;
 
     private Vector2 desiredDirection;
     private float dTime;
 
     void Awake() {
 
-        if (instance == null)
+        if (instance == null) {
+            DontDestroyOnLoad(gameObject);
             instance = this;
-        else
+        } else
             Destroy(gameObject);
     }
 
@@ -32,8 +33,15 @@ public class Controller : MonoBehaviour {
 	/// Handle movement actions
 	/// </summary>
     private void HandleMovement() {
+        
+        if (ship != null)
+            ship.Move(desiredDirection);
+    }
 
-        ship.Move(desiredDirection);
+    public void SetShip(Ship ship) {
+
+        this.ship = ship;
+        cameraSystem.followed = ship.gameObject;
     }
 
     public void OnMove(InputAction.CallbackContext context) {
@@ -44,12 +52,12 @@ public class Controller : MonoBehaviour {
     public void ToggleMenu(InputAction.CallbackContext context) {
 
 		if (context.started)
-            GameManager.instance.ToggleMenu();
+            GameManager.instance.ShowMenu();
 	}
     public void ToggleOptions(InputAction.CallbackContext context) {
 
         if (context.started)
-            GameManager.instance.ToggleOptions();
+            GameManager.instance.ShowOptions();
     }
     public void EnterMenuOrReturn(InputAction.CallbackContext context) {
 
