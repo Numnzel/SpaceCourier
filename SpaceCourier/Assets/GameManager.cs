@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private ScenesManager scenesManager;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
 
+    public bool lockScene = true;
+
     const int titleSceneIndex = 0;
 
     void Awake() {
@@ -119,6 +121,18 @@ public class GameManager : MonoBehaviour {
 
         int currentSceneIndex = scenesManager.GetCurrentScene().buildIndex;
 
+        if (currentSceneIndex == titleSceneIndex || lockScene)
+            return;
+
         LoadScene(currentSceneIndex);
     }
+
+    public void ExitGame() {
+
+        Application.Quit();
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
+        #endif
+	}
 }

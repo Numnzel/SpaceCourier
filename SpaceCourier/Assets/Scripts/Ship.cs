@@ -10,16 +10,16 @@ public class Ship : MonoBehaviour {
     [SerializeField] private int baseImpulseTorque;
     [SerializeField] private int baseImpulseBackward;
     [SerializeField] private float baseImpulseMultiplier;
-    [SerializeField] private GameObject truckModel;
-    [SerializeField] private GameObject truckLoad;
     [SerializeField] private List<GameObject> truckFlamesForwards;
     [SerializeField] private List<GameObject> truckFlamesBackwards;
     [SerializeField] private List<GameObject> truckFlamesTurnRight;
     [SerializeField] private List<GameObject> truckFlamesTurnLeft;
 
     public bool dead = false;
-    public int initialLoadCount;
+    public int startingLoadCount;
     public int loadCount;
+    public GameObject truckModel;
+    public GameObject truckLoad;
 
     private Rigidbody RB;
 
@@ -29,6 +29,14 @@ public class Ship : MonoBehaviour {
     void Awake() {
 
         RB = GetComponent<Rigidbody>();
+    }
+
+	private void Start() {
+
+        // Set load to match scene unloaders
+        Unloader[] unloaders = FindObjectsOfType<Unloader>();
+        loadCount = unloaders.Length;
+        startingLoadCount = loadCount;
     }
 
 	private void Update() {
@@ -67,6 +75,14 @@ public class Ship : MonoBehaviour {
         SetFlames(usedEForward * dir.y, usedESideward * dir.x);
     }
 
+    public void DisableShip() {
+
+        powered.disabled = true;
+        SetFlames(0, 0);
+        RB.velocity = Vector3.zero;
+        RB.isKinematic = true;
+    }
+
 	private void OnCollisionEnter(Collision collision) {
 
         Crash();
@@ -76,11 +92,8 @@ public class Ship : MonoBehaviour {
     private void Crash() {
 
         powered.RemoveEnergy(100000);
-        powered.disabled = true;
         truckModel.transform.localScale = Vector3.zero;
-        SetFlames(0, 0);
-        RB.velocity = Vector3.zero;
-        RB.isKinematic = true;
+        DisableShip();
         // spawn explosion
     }
 

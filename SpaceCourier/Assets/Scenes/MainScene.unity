@@ -206,7 +206,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 47785485}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108070406}
+        m_TargetAssemblyTypeName: GameManager, Com.Numnzel.Main
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &47785485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2569,6 +2581,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 3a09c0eb-032a-4234-8dc0-9d8bd8ee5a9c
     m_ActionName: Player/Open/Close menu[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 794810211}
+        m_TargetAssemblyTypeName: Controller, Com.Numnzel.Main
+        m_MethodName: RestartLevel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b42ca5a2-328a-4290-b53d-f084063182c0
+    m_ActionName: Player/Restart level[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -7661,6 +7689,7 @@ MonoBehaviour:
   minimap: {fileID: 1128716029}
   minimapBackground: {fileID: 1807446983}
   scenesManager: {fileID: 1665678547}
+  lockScene: 0
 --- !u!4 &2108070407
 Transform:
   m_ObjectHideFlags: 0
