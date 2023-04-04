@@ -12,9 +12,11 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasOptions;
     [SerializeField] private CanvasGroup canvasTitle;
     [SerializeField] private CanvasGroup canvasGame;
+    [SerializeField] private CanvasGroup canvasLevels;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
     [SerializeField] private ScenesManager scenesManager;
+    [SerializeField] private Button[] canvasLevelsButtons;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
 
     public bool lockScene = true;
@@ -33,10 +35,16 @@ public class GameManager : MonoBehaviour {
 	private void Start() {
 
         //scenesManager.SetCurrentScene(titleSceneIndex);
+        DataManager.InitializePlayerData();
         ShowCanvasGroup(canvasTitle);
     }
 
-    public void EnterMenuOrReturn() {
+	private void Update() {
+
+        Debug.Log(PlayerData.progression);
+    }
+
+	public void EnterMenuOrReturn() {
 
         if (!canvasFocus.Contains(canvasMenu) && !canvasFocus.Contains(canvasTitle))
             ShowMenu();
@@ -52,6 +60,14 @@ public class GameManager : MonoBehaviour {
 	
     public void ShowOptions() { ShowCanvasGroup(canvasOptions); }
     public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
+    public void ShowLevels() {
+        
+        DataManager.LoadPlayerData();
+        for (int i = 0; i < canvasLevelsButtons.Length; i++)
+            canvasLevelsButtons[i].interactable = !(i > PlayerData.progression);
+
+        ShowCanvasGroup(canvasLevels);
+    }
 
     public void ShowCanvasGroup(CanvasGroup canvasGroup) {
 
@@ -125,6 +141,16 @@ public class GameManager : MonoBehaviour {
             return;
 
         LoadScene(currentSceneIndex);
+    }
+
+    public void SetCompletedLevel() {
+
+        int currentSceneIndex = scenesManager.GetCurrentScene().buildIndex;
+
+        Debug.Log("COMPLETED LEVEL");
+        DataManager.LoadPlayerData();
+        PlayerData.progression = Mathf.Max(PlayerData.progression, currentSceneIndex);
+        DataManager.SavePlayerData();
     }
 
     public void ExitGame() {

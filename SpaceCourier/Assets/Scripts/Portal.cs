@@ -53,6 +53,7 @@ public class Portal : MonoBehaviour {
 
     private IEnumerator EndLevel(Ship ship) {
 
+        GameManager.instance.SetCompletedLevel();
         GameManager.instance.lockScene = true;
         int counter = 0;
 
