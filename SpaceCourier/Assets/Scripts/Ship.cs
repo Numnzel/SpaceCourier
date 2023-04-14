@@ -16,10 +16,9 @@ public class Ship : MonoBehaviour {
     [SerializeField] private List<GameObject> truckFlamesTurnLeft;
 
     public bool dead = false;
-    public int startingLoadCount;
-    public int loadCount;
+    public int loadCount = 1;
     public GameObject truckModel;
-    public GameObject truckLoad;
+    public GameObject[] truckLoad;
 
     private Rigidbody RB;
 
@@ -33,20 +32,35 @@ public class Ship : MonoBehaviour {
 
 	private void Start() {
 
-        // Set load to match scene unloaders
+        // Set load count to match level unloaders amount
         Unloader[] unloaders = FindObjectsOfType<Unloader>();
         loadCount = unloaders.Length;
-        startingLoadCount = loadCount;
+        UpdateShipLoad(loadCount);
     }
 
 	private void Update() {
 
         if (powered.disabled)
             SetDead();
-
-        if (loadCount == 0)
-            truckLoad.transform.localScale = Vector3.zero;
 	}
+
+    private void UpdateShipLoad(int amount) {
+
+		for (int i = truckLoad.Length; i > 0; i--) {
+
+            if (amount < i)
+                truckLoad[i-1].transform.localScale = Vector3.zero;
+        }
+
+        RB.mass = 1.0f + (amount * 0.2f);
+    }
+
+    public void Unload() {
+
+        loadCount--;
+        truckLoad[loadCount].transform.localScale = Vector3.zero;
+        UpdateShipLoad(loadCount);
+    }
 
 	public void Move(Vector2 dir) {
 
@@ -90,9 +104,11 @@ public class Ship : MonoBehaviour {
     }
 
     private void Crash() {
+        
+        if (truckModel)
+            truckModel.transform.localScale = Vector3.zero;
 
         powered.RemoveEnergy(100000);
-        truckModel.transform.localScale = Vector3.zero;
         DisableShip();
         // spawn explosion
     }

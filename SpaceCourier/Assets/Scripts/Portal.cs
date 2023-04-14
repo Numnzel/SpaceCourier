@@ -7,6 +7,7 @@ public class Portal : MonoBehaviour {
     [SerializeField] private SphereCollider triggerSphere;
     [SerializeField] private SpriteRenderer minimapSprite;
     [SerializeField] private Sprite openedSprite;
+    [SerializeField] private Sprite closedSprite;
     [SerializeField] private Ship shipPrefab;
     [SerializeField] private ParticleSystem particles;
 
@@ -16,24 +17,24 @@ public class Portal : MonoBehaviour {
 
 	private void Start() {
 
+        CreateShip();
+        EnablePortal(false);
+
+        GameManager.instance.lockScene = false;
+    }
+
+    private void CreateShip() {
+        
         ship = Instantiate(shipPrefab, transform);
         ship.transform.position = transform.position;
         ship.transform.rotation = transform.rotation;
         Controller.instance.SetShip(ship);
-        triggerSphere.enabled = false;
-		particles.Stop();
-        GameManager.instance.lockScene = false;
     }
 
 	private void Update() {
 
-        if (ship.loadCount == 0 && portalClosed) {
-
-            portalClosed = false;
-            triggerSphere.enabled = true;
-            minimapSprite.sprite = openedSprite;
-            particles.Play();
-        }
+        if (ship != null && ship.loadCount == 0 && portalClosed)
+            EnablePortal(true);
 	}
 
 	private void OnTriggerEnter(Collider other) {
@@ -48,6 +49,20 @@ public class Portal : MonoBehaviour {
 
             particles.Stop();
             endLevelCoroutine = StartCoroutine(EndLevel(ship));
+        }
+    }
+
+    private void EnablePortal(bool status) {
+
+        portalClosed = !status;
+        triggerSphere.enabled = status;
+
+        if (status) {
+            minimapSprite.sprite = openedSprite;
+            particles.Play();
+        } else {
+            minimapSprite.sprite = closedSprite;
+            particles.Stop();
         }
     }
 
@@ -85,5 +100,6 @@ public class Portal : MonoBehaviour {
             }
         }
         GameManager.instance.LoadScene(0);
+        StopCoroutine(endLevelCoroutine);
     }
 }

@@ -18,8 +18,7 @@ public class Unloader : MonoBehaviour {
             minimapSprite.sprite = completedSprite;
             triggerSphere.enabled = false;
             satisfied = true;
-            ship.loadCount--;
-            ship.gameObject.GetComponent<Rigidbody>().mass -= (0.5f * (1f / ship.startingLoadCount));
+            ship.Unload();
         }
     }
 }
