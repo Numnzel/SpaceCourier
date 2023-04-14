@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasOptions;
     [SerializeField] private CanvasGroup canvasTitle;
     [SerializeField] private CanvasGroup canvasGame;
+    [SerializeField] private CanvasGroup canvasJoysticks;
     [SerializeField] private CanvasGroup canvasLevels;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
@@ -20,10 +21,13 @@ public class GameManager : MonoBehaviour {
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
 
     public bool lockScene = true;
+    private bool runningWindows = Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
 
     const int titleSceneIndex = 0;
 
-    void Awake() {
+	public bool RunningWindows { get => runningWindows; }
+
+	void Awake() {
 
         if (instance == null) {
             DontDestroyOnLoad(gameObject);
@@ -37,11 +41,6 @@ public class GameManager : MonoBehaviour {
         //scenesManager.SetCurrentScene(titleSceneIndex);
         DataManager.InitializePlayerData();
         ShowCanvasGroup(canvasTitle);
-    }
-
-	private void Update() {
-
-        Debug.Log(PlayerData.progression);
     }
 
 	public void EnterMenuOrReturn() {
@@ -67,6 +66,13 @@ public class GameManager : MonoBehaviour {
             canvasLevelsButtons[i].interactable = !(i > PlayerData.progression);
 
         ShowCanvasGroup(canvasLevels);
+    }
+    
+    public void SetGameCanvas() {
+
+        SetMainCanvas(canvasGame);
+
+        UIUtils.SetCanvasGroup(canvasJoysticks, !RunningWindows);
     }
 
     public void ShowCanvasGroup(CanvasGroup canvasGroup) {
@@ -129,7 +135,7 @@ public class GameManager : MonoBehaviour {
             
             scenesManager.LoadScene(loadingSceneIndex);
             //scenesManager.SetCurrentScene(loadingSceneIndex);
-            SetMainCanvas(canvasGame);
+            SetGameCanvas();
         }
 	}
 

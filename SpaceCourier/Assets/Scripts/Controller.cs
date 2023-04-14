@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour {
 
@@ -9,6 +11,8 @@ public class Controller : MonoBehaviour {
 
     private Ship ship;
     [SerializeField] private CameraSystem cameraSystem;
+    [SerializeField] private Joystick joystickLeft;
+    [SerializeField] private Joystick joystickRight;
 
     private Vector2 desiredDirection;
     private float dTime;
@@ -33,7 +37,13 @@ public class Controller : MonoBehaviour {
 	/// Handle movement actions
 	/// </summary>
     private void HandleMovement() {
-        
+
+        if (!GameManager.instance.RunningWindows) {
+
+            desiredDirection.x = joystickLeft.Horizontal;
+            desiredDirection.y = joystickRight.Vertical;
+        }
+
         if (ship != null)
             ship.Move(desiredDirection);
     }

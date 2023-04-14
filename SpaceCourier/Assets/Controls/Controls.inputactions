@@ -35,8 +35,8 @@
             ],
             "bindings": [
                 {
-                    "name": "2D Vector",
-                    "id": "e0b28b64-fb32-46f6-8207-337e3be82a8a",
+                    "name": "WASD",
+                    "id": "61a7abfc-f4c1-4a4b-b312-b2d36cfcadb1",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -47,44 +47,44 @@
                 },
                 {
                     "name": "up",
-                    "id": "10fc094c-9e7e-4012-a1d7-5d962dac1449",
+                    "id": "402f3bf8-4fb4-4ffe-ae1f-f4ad0ceca54b",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controls",
+                    "groups": "PC",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "down",
-                    "id": "bc2436fc-99cd-4f4f-a1b6-9676462fe1be",
+                    "id": "6822e305-8541-421a-8691-6c98c911db52",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controls",
+                    "groups": "PC",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "left",
-                    "id": "29dbcd52-0b52-4a1a-a582-1939b1850201",
+                    "id": "62f19469-34fa-479b-bc13-728e5a481225",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controls",
+                    "groups": "PC",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "right",
-                    "id": "bacbc99f-cb28-4358-b55e-c864c8951e33",
+                    "id": "2e3ddfaa-41cd-423e-bcda-e36d8bcbfdad",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controls",
+                    "groups": "PC",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -95,7 +95,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Open/Close menu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -106,7 +106,7 @@
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Restart level",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -116,11 +116,27 @@
     ],
     "controlSchemes": [
         {
-            "name": "Controls",
-            "bindingGroup": "Controls",
+            "name": "PC",
+            "bindingGroup": "PC",
             "devices": [
                 {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Mobile",
+            "bindingGroup": "Mobile",
+            "devices": [
+                {
+                    "devicePath": "<Touchscreen>",
                     "isOptional": false,
                     "isOR": false
                 }
