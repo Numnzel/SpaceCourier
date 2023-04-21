@@ -38,7 +38,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColor:
-        m_Texture: {fileID: 2800000, guid: ed4ddac3dded54b47b90446d2bb79ac1, type: 3}
+        m_Texture: {fileID: 2800000, guid: 702b493bdf7ce98409d16b0a18276b76, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -74,7 +74,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic:
-        m_Texture: {fileID: 2800000, guid: ed4ddac3dded54b47b90446d2bb79ac1, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6f3c41892cd24e346bb2b7ec047e7f15, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -82,7 +82,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
-        m_Texture: {fileID: 2800000, guid: ed4ddac3dded54b47b90446d2bb79ac1, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -90,7 +90,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PaintMask:
-        m_Texture: {fileID: 2800000, guid: ed4ddac3dded54b47b90446d2bb79ac1, type: 3}
+        m_Texture: {fileID: 2800000, guid: bdb7c458f26554c47bd86a4eeeb1e5b3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -98,7 +98,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Roughness:
-        m_Texture: {fileID: 2800000, guid: ed4ddac3dded54b47b90446d2bb79ac1, type: 3}
+        m_Texture: {fileID: 2800000, guid: beee67ceb13c8ac44840c406e6b3023e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -134,7 +134,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
-    - _MetallicMultiplier: 0.01
+    - _MetallicMultiplier: 0.2
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -152,7 +152,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.745283, g: 0.7111177, b: 0.7077845, a: 1}
     - _Color: {r: 0.745283, g: 0.7111177, b: 0.7077845, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PaintColor: {r: 0.45176217, g: 0.70167315, b: 0.764151, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _PaintColor: {r: 0.4452948, g: 0.85845196, b: 0.8962264, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

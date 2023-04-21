@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 6403819699508734150}
   - component: {fileID: 6403819699508734149}
   - component: {fileID: 6403819699508734151}
+  - component: {fileID: 4385572773291789672}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -249,6 +250,7 @@ MonoBehaviour:
   truckFlamesTurnLeft:
   - {fileID: 154863808097070184}
   - {fileID: 4800760692992396599}
+  animator: {fileID: 4385572773291789672}
   dead: 0
   loadCount: 1
   truckModel: {fileID: 8026502971059611029}
@@ -272,6 +274,27 @@ MonoBehaviour:
   maxEnergy: 15000
   freezes: 1
   passiveEnergyConsumption: 10
+--- !u!95 &4385572773291789672
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403819699508734146}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 11a58ef04d191e04b97e5730a1c5add4, type: 3}
+  m_Controller: {fileID: 9100000, guid: fa550f1e2358ba9468fbeb4d7463825a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1073904010458403129
 PrefabInstance:
   m_ObjectHideFlags: 0

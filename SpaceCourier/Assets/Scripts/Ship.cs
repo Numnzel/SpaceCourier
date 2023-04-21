@@ -14,6 +14,7 @@ public class Ship : MonoBehaviour {
     [SerializeField] private List<GameObject> truckFlamesBackwards;
     [SerializeField] private List<GameObject> truckFlamesTurnRight;
     [SerializeField] private List<GameObject> truckFlamesTurnLeft;
+    [SerializeField] private Animator animator;
 
     public bool dead = false;
     public int loadCount = 1;
@@ -120,10 +121,13 @@ public class Ship : MonoBehaviour {
 
     private void SetFlames(float force, float torque) {
 
+        float normalizedForce = Mathf.Clamp(force, -5.0f, 5.0f) / 5.0f; // clamp and normalize force
+        float normalizedTorque = Mathf.Clamp(torque, -5.0f, 5.0f) / 5.0f; // clamp and normalize torque
         float tremblingFactor = 1.0f - (Mathf.Abs(Mathf.Sin(Time.time * 16.0f)) / 5.0f); // oscillates between 0.8 and 1.0
-        float tremblingForce = Mathf.Clamp(force, -5.0f, 5.0f) / 5.0f * tremblingFactor; // multiply the normalized force with the oscillation
-        float tremblingTorque = Mathf.Clamp(torque, -5.0f, 5.0f) / 5.0f * tremblingFactor; // multiply the normalized torque with the oscillation
+        float tremblingForce = normalizedForce * tremblingFactor; // apply oscillation
+        float tremblingTorque = normalizedTorque * tremblingFactor; // apply oscillation
 
+        // Apply flame transforms
         foreach (GameObject flame in truckFlamesForwards)
             flame.transform.localScale = Vector3.one * Mathf.Min(largeFlameBaseScale, largeFlameBaseScale * Mathf.Max(0, tremblingForce));
 
@@ -135,5 +139,14 @@ public class Ship : MonoBehaviour {
 
         foreach (GameObject flame in truckFlamesTurnLeft)
             flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale, smallFlameBaseScale * Mathf.Max(0, -tremblingTorque));
+
+        // Apply ship motor animations
+        animator.SetFloat("BlendMotorFrontR", Mathf.Max(0, -normalizedForce));
+        animator.SetFloat("BlendMotorFrontL", Mathf.Max(0, -normalizedForce));
+        animator.SetFloat("BlendMotorBack", Mathf.Max(0, normalizedForce));
+        animator.SetFloat("BlendMotorLeftF", Mathf.Max(0, normalizedTorque));
+        animator.SetFloat("BlendMotorLeftB", Mathf.Max(0, -normalizedTorque));
+        animator.SetFloat("BlendMotorRightF", Mathf.Max(0, -normalizedTorque));
+        animator.SetFloat("BlendMotorRightB", Mathf.Max(0, normalizedTorque));
     }
 }
