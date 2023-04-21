@@ -120,20 +120,20 @@ public class Ship : MonoBehaviour {
 
     private void SetFlames(float force, float torque) {
 
-        float tremblingValue = Mathf.Sin(Time.time / 100) + 0.7f;
-        float tremblingForce = force * tremblingValue;
-        float tremblingTorque = torque * tremblingValue;
+        float tremblingFactor = 1.0f - (Mathf.Abs(Mathf.Sin(Time.time * 16.0f)) / 5.0f); // oscillates between 0.8 and 1.0
+        float tremblingForce = Mathf.Clamp(force, -5.0f, 5.0f) / 5.0f * tremblingFactor; // multiply the normalized force with the oscillation
+        float tremblingTorque = Mathf.Clamp(torque, -5.0f, 5.0f) / 5.0f * tremblingFactor; // multiply the normalized torque with the oscillation
 
         foreach (GameObject flame in truckFlamesForwards)
-            flame.transform.localScale = Vector3.one * Mathf.Min(largeFlameBaseScale * 1.0f, largeFlameBaseScale * Mathf.Max(0, tremblingForce / 9));
+            flame.transform.localScale = Vector3.one * Mathf.Min(largeFlameBaseScale, largeFlameBaseScale * Mathf.Max(0, tremblingForce));
 
         foreach (GameObject flame in truckFlamesBackwards)
-            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale * 1.2f, smallFlameBaseScale * Mathf.Max(0, -tremblingForce / 3));
+            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale, smallFlameBaseScale * Mathf.Max(0, -tremblingForce));
 
         foreach (GameObject flame in truckFlamesTurnRight)
-            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale * 1.2f, smallFlameBaseScale * Mathf.Max(0, tremblingTorque / 3));
+            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale, smallFlameBaseScale * Mathf.Max(0, tremblingTorque));
 
         foreach (GameObject flame in truckFlamesTurnLeft)
-            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale * 1.2f, smallFlameBaseScale * Mathf.Max(0, -tremblingTorque / 3));
+            flame.transform.localScale = Vector3.one * Mathf.Min(smallFlameBaseScale, smallFlameBaseScale * Mathf.Max(0, -tremblingTorque));
     }
 }
