@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class EnergySource : MonoBehaviour {
 
-    private List<Powered> PoweredUnits;
+    private List<Powered> poweredObjects;
     [SerializeField] private Rigidbody RB; // used for autosetting luminity
     [SerializeField] private SphereCollider triggerSphere;
-    [SerializeField] private float areaMultiplier;
+    [SerializeField] private float energySphereRadiusMultiplier;
     [SerializeField] private float luminity;
-    [SerializeField] private float luminityMultiplier;
+    [SerializeField] private float energyMultiplier;
 
     void Awake() {
 
-        PoweredUnits = new List<Powered>();
+        poweredObjects = new List<Powered>();
 
         if (triggerSphere == null) {
 
@@ -21,12 +21,8 @@ public class EnergySource : MonoBehaviour {
             return;
         }
 
-        // Get luminity from mass
-        if (RB != null)
-            luminity = RB.mass;
-
-        triggerSphere.radius = (luminity * areaMultiplier) / transform.localScale.x;
-        triggerSphere.isTrigger = true;
+        SetLuminity();
+        SetEnergySphere();
     }
 
 	private void OnTriggerEnter(Collider other) {
@@ -34,7 +30,7 @@ public class EnergySource : MonoBehaviour {
         Powered powered;
 
         if (other.TryGetComponent<Powered>(out powered) && !powered.disabled)
-            PoweredUnits.Add(powered);
+            poweredObjects.Add(powered);
 	}
 
 	private void OnTriggerExit(Collider other) {
@@ -42,22 +38,33 @@ public class EnergySource : MonoBehaviour {
         Powered powered;
 
         if (other.TryGetComponent<Powered>(out powered))
-            PoweredUnits.Remove(powered);
+            poweredObjects.Remove(powered);
 	}
 
     private void OnDrawGizmos() {
 
-        // Get luminity from mass
-        if (RB != null)
-            luminity = RB.mass;
-
+        SetLuminity();
+        SetEnergySphere();
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, luminity * areaMultiplier);
+        Gizmos.DrawWireSphere(transform.position, triggerSphere.radius * transform.localScale.x);
     }
 
-    void Update() {
+    private void SetLuminity() {
+       
+        // Get luminity from mass
+        if (RB != null)
+            luminity = 1 + Mathf.Log(RB.mass);
+    }
 
-        foreach (Powered powered in PoweredUnits) {
+    private void SetEnergySphere() {
+
+        triggerSphere.radius = luminity * energySphereRadiusMultiplier;
+        triggerSphere.isTrigger = true;
+    }
+
+    private void Update() {
+
+        foreach (Powered powered in poweredObjects) {
 
             if (powered.disabled)
                 continue;
@@ -65,7 +72,7 @@ public class EnergySource : MonoBehaviour {
             float dist = Vector3.Distance(transform.position, powered.transform.position);
             float eForce = luminity / dist;
 
-            powered.AddEnergy(Mathf.CeilToInt(eForce * luminityMultiplier * Time.deltaTime));
+            powered.AddEnergy(Mathf.CeilToInt(eForce * energyMultiplier * Time.deltaTime));
         }
     }
 }
