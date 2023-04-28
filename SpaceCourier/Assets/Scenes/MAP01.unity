@@ -320,6 +320,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal
       objectReference: {fileID: 0}
+    - target: {fileID: 264307691232423324, guid: 3dbcae7b10cd88049943c4c1a114466f, type: 3}
+      propertyPath: m_Radius
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 264307691232423325, guid: 3dbcae7b10cd88049943c4c1a114466f, type: 3}
       propertyPath: m_RootOrder
       value: 4

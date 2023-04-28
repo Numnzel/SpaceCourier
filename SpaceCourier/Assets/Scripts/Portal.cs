@@ -47,7 +47,6 @@ public class Portal : MonoBehaviour {
             SRB.velocity = Vector3.zero;
             SRB.isKinematic = true;
 
-            particles.Stop();
             endLevelCoroutine = StartCoroutine(EndLevel(ship));
         }
     }
@@ -99,6 +98,7 @@ public class Portal : MonoBehaviour {
 				}
             }
         }
+
         GameManager.instance.LoadScene(0);
         StopCoroutine(endLevelCoroutine);
     }
