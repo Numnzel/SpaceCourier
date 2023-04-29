@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour {
 
-    public float rotationSpeed;
 	//private MaterialPropertyBlock materialPropertyBlock;
-	[SerializeField] private Renderer meshRenderer;
+	//[SerializeField] private Renderer meshRenderer;
 
 	private void Awake() {
 
 		//SetShader();
 		InitialInclination();
-	}
-
-	private void Update() {
-
-		Rotate();
 	}
 
 	/* private void SetShader() {
@@ -38,12 +32,5 @@ public class Planet : MonoBehaviour {
 		Vector3 inclination = new Vector3(transform.localRotation.x, transform.localRotation.y + Random.Range(0, 360f), transform.localRotation.z + Random.Range(0, maxDegrees));
 		
 		transform.localRotation = Quaternion.Euler(inclination);
-	}
-
-	private void Rotate() {
-
-		Vector3 rotationValue = new Vector3(0, rotationSpeed * Time.deltaTime, 0);
-
-		transform.Rotate(rotationValue);
 	}
 }
