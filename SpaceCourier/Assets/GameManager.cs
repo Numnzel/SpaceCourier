@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasGame;
     [SerializeField] private CanvasGroup canvasJoysticks;
     [SerializeField] private CanvasGroup canvasLevels;
+    [SerializeField] private CanvasGroup canvasReadme;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
     [SerializeField] private ScenesManager scenesManager;
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour {
 	
     public void ShowOptions() { ShowCanvasGroup(canvasOptions); }
     public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
+    public void ShowReadme() { ShowCanvasGroup(canvasReadme); }
     public void ShowLevels() {
         
         DataManager.LoadPlayerData();
@@ -157,6 +159,16 @@ public class GameManager : MonoBehaviour {
         DataManager.LoadPlayerData();
         PlayerData.progression = Mathf.Max(PlayerData.progression, currentSceneIndex);
         DataManager.SavePlayerData();
+    }
+
+	public void OpenKofi() {
+
+        Application.OpenURL("https://ko-fi.com/numnzel");
+    }
+
+    public void OpenGit() {
+
+        Application.OpenURL("https://github.com/Numnzel/SpaceCourier");
     }
 
     public void ExitGame() {
