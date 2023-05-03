@@ -6,24 +6,25 @@ public class Powered : MonoBehaviour {
 
     [SerializeField] private int energy;
     [SerializeField] private int maxEnergy;
-    [SerializeField] private bool freezes;
+    [SerializeField] private bool usesOxygen;
     [SerializeField] private int passiveEnergyConsumption;
     internal bool disabled = false;
 
     private Coroutine passiveConsumptionCR;
     private Coroutine updateAveragesCR;
-    private Coroutine freezeCR;
+    private Coroutine oxygenCR;
 
-    private int freezeAmount;
+    private int oxygenAmount;
     private int averageEnergyGain;
     private int averageEnergyLoss;
 
     const int usedEnergyIndicatorMax = 100;
-    const int freezeMaximum = 500;
-    const int unfreezeEnergyThreshold = 1000;
+    const int oxygenMaximum = 500;
+    const int oxygenEnergyThreshold = 1000;
 
     private void Start() {
 
+        oxygenAmount = oxygenMaximum;
         passiveConsumptionCR = StartCoroutine(PassiveConsumption());
         updateAveragesCR = StartCoroutine(UpdateAverageValues());
     }
@@ -36,32 +37,32 @@ public class Powered : MonoBehaviour {
 
             RemoveEnergy(passiveEnergyConsumption);
 
-            if (energy > unfreezeEnergyThreshold)
-                freezeAmount = Mathf.Max(0, freezeAmount-1);
+            if (energy > oxygenEnergyThreshold)
+                oxygenAmount = Mathf.Min(oxygenMaximum, oxygenAmount+1);
         }
 
-        if (freezes && !disabled)
-            freezeCR = StartCoroutine(Freeze());
+        if (usesOxygen && !disabled)
+            oxygenCR = StartCoroutine(LoseOxygen());
 
         if (passiveConsumptionCR != null)
             StopCoroutine(passiveConsumptionCR);
     }
 
-    public IEnumerator Freeze() {
+    public IEnumerator LoseOxygen() {
 
         while (energy == 0 && !disabled) {
 
             yield return new WaitForSeconds(0.01f);
 
-            if (++freezeAmount >= freezeMaximum)
+            if (--oxygenAmount <= 0)
                 disabled = true;
         }
 
         if (!disabled)
             passiveConsumptionCR = StartCoroutine(PassiveConsumption());
 
-        if (freezeCR != null)
-            StopCoroutine(freezeCR);
+        if (oxygenCR != null)
+            StopCoroutine(oxygenCR);
     }
 
     public IEnumerator UpdateAverageValues() {
@@ -89,7 +90,7 @@ public class Powered : MonoBehaviour {
         UIManager.instance.UpdateEnergyBar(energy, maxEnergy);
         UIManager.instance.UpdateImpulseBar(averageEnergyLoss, usedEnergyIndicatorMax);
         UIManager.instance.UpdateSolarBar(averageEnergyGain, usedEnergyIndicatorMax);
-        UIManager.instance.UpdateFreezeBar(freezeAmount, freezeMaximum);
+        UIManager.instance.UpdateFreezeBar(oxygenAmount, oxygenMaximum);
     }
 
     public bool SetEnergy(int value) {

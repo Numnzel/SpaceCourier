@@ -272,7 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energy: 15000
   maxEnergy: 15000
-  freezes: 1
+  usesOxygen: 1
   passiveEnergyConsumption: 10
 --- !u!95 &4385572773291789672
 Animator:

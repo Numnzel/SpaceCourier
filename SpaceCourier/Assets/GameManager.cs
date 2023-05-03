@@ -14,9 +14,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasGame;
     [SerializeField] private CanvasGroup canvasJoysticks;
     [SerializeField] private CanvasGroup canvasLevels;
+    [SerializeField] private RectTransform canvasBars;
     [SerializeField] private CanvasGroup canvasReadme;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
+    [SerializeField] private Slider sliderMinimap;
+    [SerializeField] private Slider sliderScale;
     [SerializeField] private ScenesManager scenesManager;
     [SerializeField] private Button[] canvasLevelsButtons;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour {
 
         //scenesManager.SetCurrentScene(titleSceneIndex);
         DataManager.InitializePlayerData();
+        LoadUserConfiguration();
         ShowCanvasGroup(canvasTitle);
     }
 
@@ -104,21 +108,53 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void LoadUserConfiguration() {
+
+        if (!DataManager.LoadPlayerData())
+            return;
+
+        ApplyConfiguration();
+        sliderMinimap.value = PlayerData.optionValue_mapAlpha;
+        sliderScale.value = PlayerData.optionValue_uiScale;
+    }
+
+    public void SaveUserConfiguration() {
+
+        ApplyConfiguration();
+        DataManager.SavePlayerData();
+    }
+
+    private void ApplyConfiguration() {
+
+        SetMinimapAlpha(PlayerData.optionValue_mapAlpha);
+        SetBarsScale(PlayerData.optionValue_uiScale);
+    }
+
     public void SetMainCanvas(CanvasGroup canvasGroup) {
 
         HideAllCanvasGroup();
         ShowCanvasGroup(canvasGroup);
     }
 
-    public void SetMinimapAlpha(Single value) {
+    public void SetConfigurationMinimapAlpha() {
 
-        SetImageAlpha(minimap, value);
-        SetImageAlpha(minimapBackground, value);
+        PlayerData.optionValue_mapAlpha = Mathf.Min(sliderMinimap.value, sliderMinimap.maxValue);
     }
 
-    private void SetImageAlpha(RawImage image, float value) {
+    private void SetMinimapAlpha(float value) {
 
-        UIUtils.SetImageAlpha(ref image, value);
+        UIUtils.SetImageAlpha(ref minimap, value);
+        UIUtils.SetImageAlpha(ref minimapBackground, value);
+    }
+
+    public void SetConfigurationBarsScale() {
+
+        PlayerData.optionValue_uiScale = Mathf.Min(sliderScale.value, sliderScale.maxValue);
+    }
+
+    private void SetBarsScale(float value) {
+
+        UIUtils.SetCanvasScale(canvasBars, value);
     }
 
     public void LoadScene(int loadingSceneIndex) {
