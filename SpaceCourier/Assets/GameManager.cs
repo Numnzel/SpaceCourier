@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasOptions;
     [SerializeField] private CanvasGroup canvasTitle;
     [SerializeField] private CanvasGroup canvasGame;
-    [SerializeField] private CanvasGroup canvasJoysticks;
+    [SerializeField] private CanvasGroup canvasAndroid;
     [SerializeField] private CanvasGroup canvasLevels;
     [SerializeField] private RectTransform canvasBars;
     [SerializeField] private CanvasGroup canvasReadme;
@@ -20,6 +21,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private RawImage minimapBackground;
     [SerializeField] private Slider sliderMinimap;
     [SerializeField] private Slider sliderScale;
+    [SerializeField] private Slider sliderSound;
+    [SerializeField] private Slider sliderMusic;
+    [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private ScenesManager scenesManager;
     [SerializeField] private Button[] canvasLevelsButtons;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour {
 
         SetMainCanvas(canvasGame);
 
-        UIUtils.SetCanvasGroup(canvasJoysticks, !RunningWindows);
+        UIUtils.SetCanvasGroup(canvasAndroid, !RunningWindows);
     }
 
     public void ShowCanvasGroup(CanvasGroup canvasGroup) {
@@ -114,8 +118,11 @@ public class GameManager : MonoBehaviour {
             return;
 
         ApplyConfiguration();
+
         sliderMinimap.value = PlayerData.optionValue_mapAlpha;
         sliderScale.value = PlayerData.optionValue_uiScale;
+        sliderSound.value = PlayerData.optionValue_sound;
+        sliderMusic.value = PlayerData.optionValue_music;
     }
 
     public void SaveUserConfiguration() {
@@ -128,6 +135,8 @@ public class GameManager : MonoBehaviour {
 
         SetMinimapAlpha(PlayerData.optionValue_mapAlpha);
         SetBarsScale(PlayerData.optionValue_uiScale);
+        SetSoundVolume(PlayerData.optionValue_sound);
+        SetMusicVolume(PlayerData.optionValue_music);
     }
 
     public void SetMainCanvas(CanvasGroup canvasGroup) {
@@ -141,20 +150,44 @@ public class GameManager : MonoBehaviour {
         PlayerData.optionValue_mapAlpha = Mathf.Min(sliderMinimap.value, sliderMinimap.maxValue);
     }
 
+    public void SetConfigurationBarsScale() {
+
+        PlayerData.optionValue_uiScale = Mathf.Min(sliderScale.value, sliderScale.maxValue);
+    }
+
+    public void SetConfigurationSoundVolume() {
+
+        PlayerData.optionValue_sound = Mathf.Min(sliderSound.value, sliderSound.maxValue);
+    }
+
+    public void SetConfigurationMusicVolume() {
+
+        PlayerData.optionValue_music = Mathf.Min(sliderMusic.value, sliderMusic.maxValue);
+    }
+
     private void SetMinimapAlpha(float value) {
 
         UIUtils.SetImageAlpha(ref minimap, value);
         UIUtils.SetImageAlpha(ref minimapBackground, value);
     }
 
-    public void SetConfigurationBarsScale() {
-
-        PlayerData.optionValue_uiScale = Mathf.Min(sliderScale.value, sliderScale.maxValue);
-    }
-
     private void SetBarsScale(float value) {
 
         UIUtils.SetCanvasScale(canvasBars, value);
+    }
+
+    private void SetSoundVolume(float value) {
+
+        float volume = value > 0 ? Mathf.Log10(value) * 20f : -80f;
+
+        audioMixer.SetFloat("SoundVolume", volume);
+    }
+
+    private void SetMusicVolume(float value) {
+
+        float volume = value > 0 ? Mathf.Log10(value) * 20f : -80f;
+
+        audioMixer.SetFloat("MusicVolume", volume);
     }
 
     public void LoadScene(int loadingSceneIndex) {
