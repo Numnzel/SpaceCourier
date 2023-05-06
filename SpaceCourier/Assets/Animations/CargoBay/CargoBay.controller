@@ -21,7 +21,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 67ba57e04cbaec34f9f7665064719ed5, type: 2}
+  m_Motion: {fileID: 1046607795334109174, guid: f654288c07f356142b4ceee08a9e4ad9, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -44,9 +44,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.6671231
   m_TransitionOffset: 0
-  m_ExitTime: 0.75
+  m_ExitTime: 1
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -59,7 +59,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: Layer CargoBay
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 3022314707434890999}
@@ -91,10 +91,10 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Base Layer
+    m_Name: Layer CargoBay
     m_StateMachine: {fileID: -2776962764398402635}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -125,7 +125,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 92e892a1ab70678419175f50999815a6, type: 2}
+  m_Motion: {fileID: 8804956931720141230, guid: f654288c07f356142b4ceee08a9e4ad9, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

@@ -34,7 +34,7 @@ public class Ship : MonoBehaviour {
 	private void Start() {
 
         // Set load count to match level unloaders amount
-        Unloader[] unloaders = FindObjectsOfType<Unloader>();
+        CargoBay[] unloaders = FindObjectsOfType<CargoBay>();
         loadCount = unloaders.Length;
         UpdateShipLoad(loadCount);
     }

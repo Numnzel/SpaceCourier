@@ -4,26 +4,10 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour {
 
-	//private MaterialPropertyBlock materialPropertyBlock;
-	//[SerializeField] private Renderer meshRenderer;
-
 	private void Awake() {
 
-		//SetShader();
 		InitialInclination();
 	}
-
-	/* private void SetShader() {
-
-		materialPropertyBlock = new();
-		meshRenderer.GetPropertyBlock(materialPropertyBlock);
-
-		int property = Shader.PropertyToID("_Seed");
-		float seed = (transform.position.x + transform.position.z) / 10.0f;
-		
-		materialPropertyBlock.SetFloat(property, seed);
-		meshRenderer.SetPropertyBlock(materialPropertyBlock);
-	} */
 
 	private void InitialInclination() {
 
