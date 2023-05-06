@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackgroundPlanes : MonoBehaviour {
+public class ParallaxManager : MonoBehaviour {
 
     [SerializeField] private float planeSize;
     [SerializeField] private GameObject planePrefab;
+
+    public Texture2D parallaxTexture;
 
     private List<GameObject> copies = new List<GameObject>();
     private float translationX;
@@ -59,4 +61,10 @@ public class BackgroundPlanes : MonoBehaviour {
                     transform.position.y,
                     (transform.position.z + (translationZ * j)) - centeringOffsetZ);
     }
+
+    public void UpdateCopiesTexture() {
+
+		foreach (GameObject copy in copies)
+            copy.GetComponent<MeshRenderer>().material.mainTexture = parallaxTexture;
+	}
 }

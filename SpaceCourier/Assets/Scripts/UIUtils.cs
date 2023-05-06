@@ -12,6 +12,11 @@ public static class UIUtils {
 		canvasGroup.blocksRaycasts = enable;
 	}
 
+	public static void SetCanvasGroupInteractable(CanvasGroup canvasGroup, bool enable) {
+
+		canvasGroup.interactable = enable;
+	}
+
 	public static void SetCanvasScale(RectTransform canvas, float value) {
 		
 		canvas.localScale = new Vector3(value, value, value) + Vector3.one;

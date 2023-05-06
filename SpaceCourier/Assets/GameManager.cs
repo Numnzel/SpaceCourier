@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasGame;
     [SerializeField] private CanvasGroup canvasAndroid;
     [SerializeField] private CanvasGroup canvasLevels;
+    [SerializeField] private CanvasGroup canvasControls;
     [SerializeField] private RectTransform canvasBars;
     [SerializeField] private CanvasGroup canvasReadme;
     [SerializeField] private RawImage minimap;
@@ -26,8 +27,11 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private ScenesManager scenesManager;
     [SerializeField] private Button[] canvasLevelsButtons;
+    [SerializeField] private MeshRenderer backgroundPlane;
+    [SerializeField] private ParallaxManager parallaxManager;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
 
+    public List<LevelSO> levels = new List<LevelSO>();
     public bool lockScene = true;
     private bool runningWindows = Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
 
@@ -50,6 +54,10 @@ public class GameManager : MonoBehaviour {
         DataManager.InitializePlayerData();
         LoadUserConfiguration();
         ShowCanvasGroup(canvasTitle);
+
+        DataManager.LoadPlayerData();
+        PlayerData.progression = 99;
+        DataManager.SavePlayerData();
     }
 
 	public void EnterMenuOrReturn() {
@@ -69,6 +77,7 @@ public class GameManager : MonoBehaviour {
     public void ShowOptions() { ShowCanvasGroup(canvasOptions); }
     public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
     public void ShowReadme() { ShowCanvasGroup(canvasReadme); }
+    public void ShowControls() { ShowCanvasGroup(canvasControls); }
     public void ShowLevels() {
         
         DataManager.LoadPlayerData();
@@ -90,8 +99,12 @@ public class GameManager : MonoBehaviour {
         if (canvasGroup == null)
             return;
 
-        UIUtils.SetCanvasGroup(canvasGroup, true);
-        canvasFocus.Push(canvasGroup);
+        UIUtils.SetCanvasGroup(canvasGroup, true); // show and enable the new canvas group
+
+        if (canvasFocus.Count > 0)
+            UIUtils.SetCanvasGroupInteractable(canvasFocus.Peek(), false); // disable previous canvas group
+
+        canvasFocus.Push(canvasGroup); // set canvas group as focus
     }
     
     public void HideCanvasGroup() {
@@ -99,8 +112,9 @@ public class GameManager : MonoBehaviour {
         if (canvasFocus.Count <= 1)
             return;
 
-        UIUtils.SetCanvasGroup(canvasFocus.Peek(), false);
-        canvasFocus.Pop();
+        UIUtils.SetCanvasGroup(canvasFocus.Peek(), false); // hide and disable current focused canvas group
+        canvasFocus.Pop(); // remove focus from current canvas
+        UIUtils.SetCanvasGroupInteractable(canvasFocus.Peek(), true); // enable previous canvas group
     }
 
     private void HideAllCanvasGroup() {
@@ -190,8 +204,9 @@ public class GameManager : MonoBehaviour {
         audioMixer.SetFloat("MusicVolume", volume);
     }
 
-    public void LoadScene(int loadingSceneIndex) {
+    public void LoadLevel(LevelSO level) {
 
+        int loadingSceneIndex = level.sceneIndex;
         int currentSceneIndex = scenesManager.GetCurrentScene().buildIndex;
 
         if (loadingSceneIndex == titleSceneIndex) {
@@ -204,11 +219,19 @@ public class GameManager : MonoBehaviour {
             if (currentSceneIndex != titleSceneIndex)
                 scenesManager.UnloadScene(currentSceneIndex);
             
-            scenesManager.LoadScene(loadingSceneIndex);
+            SetLevel(level);
             //scenesManager.SetCurrentScene(loadingSceneIndex);
             SetGameCanvas();
         }
 	}
+
+    private void SetLevel(LevelSO level) {
+
+        scenesManager.LoadScene(level.sceneIndex);
+        backgroundPlane.material.mainTexture = level.backgroundPlaneTexture;
+        parallaxManager.parallaxTexture = level.parallaxPlaneTexture;
+        parallaxManager.UpdateCopiesTexture();
+    }
 
     public void RestartScene() {
 
@@ -217,7 +240,7 @@ public class GameManager : MonoBehaviour {
         if (currentSceneIndex == titleSceneIndex || lockScene)
             return;
 
-        LoadScene(currentSceneIndex);
+        LoadLevel(levels[currentSceneIndex]);
     }
 
     public void SetCompletedLevel() {

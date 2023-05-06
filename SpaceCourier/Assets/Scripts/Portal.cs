@@ -99,7 +99,7 @@ public class Portal : MonoBehaviour {
             }
         }
 
-        GameManager.instance.LoadScene(0);
+        GameManager.instance.LoadLevel(GameManager.instance.levels[0]);
         StopCoroutine(endLevelCoroutine);
     }
 }
