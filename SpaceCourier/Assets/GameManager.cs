@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Button[] canvasLevelsButtons;
     [SerializeField] private MeshRenderer backgroundPlane;
     [SerializeField] private ParallaxManager parallaxManager;
+    [SerializeField] private Volume postProcessingManager;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
 
     public List<LevelSO> levels = new List<LevelSO>();
@@ -231,6 +233,7 @@ public class GameManager : MonoBehaviour {
         backgroundPlane.material.mainTexture = level.backgroundPlaneTexture;
         parallaxManager.parallaxTexture = level.parallaxPlaneTexture;
         parallaxManager.UpdateCopiesTexture();
+        postProcessingManager.profile = level.volumeProfile;
     }
 
     public void RestartScene() {

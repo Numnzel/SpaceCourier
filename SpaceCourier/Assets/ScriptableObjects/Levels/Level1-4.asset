@@ -15,3 +15,5 @@ MonoBehaviour:
   sceneIndex: 4
   backgroundPlaneTexture: {fileID: 2800000, guid: 60772fcf25913e34d94a289263f6d601, type: 3}
   parallaxPlaneTexture: {fileID: 2800000, guid: 3f6e3602a417a84449eb9ca086bcda7e, type: 3}
+  lightingSettings: {fileID: 0}
+  volumeProfile: {fileID: 11400000, guid: d7c1ed6ff54c46d419207e753bca1fb3, type: 2}
