@@ -36,6 +36,7 @@ public static class DataManager {
     static private void SerializeAllData(BinaryFormatter binaryFormatter, FileStream fileStream) {
 
         binaryFormatter.Serialize(fileStream, PlayerData.progression);
+        binaryFormatter.Serialize(fileStream, PlayerData.optionValue_arrowsAlpha);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_mapAlpha);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_uiScale);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_music);
@@ -45,6 +46,7 @@ public static class DataManager {
     static private void DeserializeAllData(BinaryFormatter binaryFormatter, FileStream fileStream) {
 
         PlayerData.progression = (int)binaryFormatter.Deserialize(fileStream);
+        PlayerData.optionValue_arrowsAlpha = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_mapAlpha = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_uiScale = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_music = (float)binaryFormatter.Deserialize(fileStream);

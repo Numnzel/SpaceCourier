@@ -9,5 +9,6 @@ public static class PlayerData {
     public static float optionValue_sound;
     public static float optionValue_music;
     public static float optionValue_mapAlpha;
+    public static float optionValue_arrowsAlpha;
     public static float optionValue_uiScale;
 }

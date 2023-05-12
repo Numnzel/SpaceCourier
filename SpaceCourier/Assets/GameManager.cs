@@ -5,11 +5,12 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour {
 
+    [Header("Properties")]
     public static GameManager instance;
-
     [SerializeField] private CanvasGroup canvasMenu;
     [SerializeField] private CanvasGroup canvasOptions;
     [SerializeField] private CanvasGroup canvasTitle;
@@ -25,19 +26,26 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Slider sliderScale;
     [SerializeField] private Slider sliderSound;
     [SerializeField] private Slider sliderMusic;
+    [SerializeField] private Slider sliderArrows;
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private ScenesManager scenesManager;
     [SerializeField] private Button[] canvasLevelsButtons;
     [SerializeField] private MeshRenderer backgroundPlane;
     [SerializeField] private ParallaxManager parallaxManager;
     [SerializeField] private Volume postProcessingManager;
+    public ObjectiveArrows objectiveArrows;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
-
     public List<LevelSO> levels = new List<LevelSO>();
     public bool lockScene = true;
     private bool runningWindows = Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
-
     const int titleSceneIndex = 0;
+
+    [Header("Option Events")]
+    public UnityEvent<float> OnApplyArrowsAlpha;
+    public UnityEvent<float> OnApplyMinimapAlpha;
+    public UnityEvent<float> OnApplyBarsScale;
+    public UnityEvent<float> OnApplyMusicVolume;
+    public UnityEvent<float> OnApplySoundVolume;
 
 	public bool RunningWindows { get => runningWindows; }
 
@@ -135,6 +143,7 @@ public class GameManager : MonoBehaviour {
 
         ApplyConfiguration();
 
+        sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
         sliderMinimap.value = PlayerData.optionValue_mapAlpha;
         sliderScale.value = PlayerData.optionValue_uiScale;
         sliderSound.value = PlayerData.optionValue_sound;
@@ -149,10 +158,11 @@ public class GameManager : MonoBehaviour {
 
     private void ApplyConfiguration() {
 
-        SetMinimapAlpha(PlayerData.optionValue_mapAlpha);
-        SetBarsScale(PlayerData.optionValue_uiScale);
-        SetSoundVolume(PlayerData.optionValue_sound);
-        SetMusicVolume(PlayerData.optionValue_music);
+        OnApplyArrowsAlpha.Invoke(PlayerData.optionValue_arrowsAlpha);
+        OnApplyMinimapAlpha.Invoke(PlayerData.optionValue_mapAlpha);
+        OnApplyBarsScale.Invoke(PlayerData.optionValue_uiScale);
+        OnApplyMusicVolume.Invoke(PlayerData.optionValue_music);
+        OnApplySoundVolume.Invoke(PlayerData.optionValue_sound);
     }
 
     public void SetMainCanvas(CanvasGroup canvasGroup) {
@@ -181,25 +191,30 @@ public class GameManager : MonoBehaviour {
         PlayerData.optionValue_music = Mathf.Min(sliderMusic.value, sliderMusic.maxValue);
     }
 
-    private void SetMinimapAlpha(float value) {
+    public void SetConfigurationArrowsAlpha() {
+        
+        PlayerData.optionValue_arrowsAlpha = Mathf.Min(sliderArrows.value, sliderArrows.maxValue);
+    }
+
+    public void SetMinimapAlpha(float value) {
 
         UIUtils.SetImageAlpha(ref minimap, value);
         UIUtils.SetImageAlpha(ref minimapBackground, value);
     }
 
-    private void SetBarsScale(float value) {
+    public void SetBarsScale(float value) {
 
         UIUtils.SetCanvasScale(canvasBars, value);
     }
 
-    private void SetSoundVolume(float value) {
+    public void SetSoundVolume(float value) {
 
         float volume = value > 0 ? Mathf.Log10(value) * 20f : -80f;
 
         audioMixer.SetFloat("SoundVolume", volume);
     }
 
-    private void SetMusicVolume(float value) {
+    public void SetMusicVolume(float value) {
 
         float volume = value > 0 ? Mathf.Log10(value) * 20f : -80f;
 

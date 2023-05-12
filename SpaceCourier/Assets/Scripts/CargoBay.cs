@@ -13,6 +13,16 @@ public class CargoBay : MonoBehaviour {
 
     private bool satisfied = false;
     private MaterialPropertyBlock materialPropertyBlock;
+    ObjectiveArrows arrows;
+    ObjectiveArrow arrow;
+
+    private void Start() {
+
+        arrows = GameManager.instance.objectiveArrows;
+
+        if (arrow == null)
+            arrow = arrows.CreateArrow(this.gameObject);
+    }
 
 	private void OnTriggerEnter(Collider other) {
 
@@ -25,6 +35,7 @@ public class CargoBay : MonoBehaviour {
             minimapSprite.sprite = completedSprite;
             triggerSphere.enabled = false;
             satisfied = true;
+            Destroy(arrow.gameObject);
 
             ship.Unload();
         }
