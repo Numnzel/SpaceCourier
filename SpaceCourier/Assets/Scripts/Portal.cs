@@ -20,7 +20,7 @@ public class Portal : MonoBehaviour {
         CreateShip();
         EnablePortal(false);
 
-        GameManager.instance.lockScene = false;
+        ScenesManager.instance.lockScene = false;
     }
 
     private void CreateShip() {
@@ -68,7 +68,7 @@ public class Portal : MonoBehaviour {
     private IEnumerator EndLevel(Ship ship) {
 
         GameManager.instance.SetCompletedLevel();
-        GameManager.instance.lockScene = true;
+        ScenesManager.instance.lockScene = true;
         int counter = 0;
 
         List<MeshRenderer> truckPieces = new List<MeshRenderer>();

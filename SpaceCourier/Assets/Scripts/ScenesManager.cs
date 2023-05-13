@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class ScenesManager : MonoBehaviour {
 
     public static ScenesManager instance;
+    public bool lockScene = true;
+
+    public const int titleSceneIndex = 0;
 
     void Awake() {
 

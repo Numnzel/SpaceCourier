@@ -488,7 +488,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -499,7 +499,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
@@ -3038,7 +3038,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 305229125}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -3136,7 +3136,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3147,7 +3147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -3323,20 +3323,20 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 1
+  m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 1, g: 0.7727641, b: 0, a: 1}
+    topRight: {r: 1, g: 0.7727641, b: 0, a: 1}
+    bottomLeft: {r: 1, g: 0.04887746, b: 0, a: 1}
+    bottomRight: {r: 1, g: 0.04887746, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 2427
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -4076,6 +4076,142 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482464250}
   m_CullTransparentMesh: 1
+--- !u!1 &502783243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 502783245}
+  - component: {fileID: 502783244}
+  m_Layer: 0
+  m_Name: CanvasManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &502783244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502783243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2383e2a11a24646901601017a43cbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasMenu: {fileID: 820871004}
+  canvasOptions: {fileID: 1006854563}
+  canvasTitle: {fileID: 972454159}
+  canvasGame: {fileID: 508604266}
+  canvasAndroid: {fileID: 1238223953}
+  canvasLevels: {fileID: 1732572785}
+  canvasControls: {fileID: 1247130458}
+  canvasReadme: {fileID: 305229127}
+  canvasBars: {fileID: 1137758111}
+  canvasLevelsButtons:
+  - {fileID: 616730181}
+  - {fileID: 1427432932}
+  - {fileID: 376063015}
+  - {fileID: 1859473723}
+  - {fileID: 1265695764}
+  - {fileID: 1852396590}
+  - {fileID: 1790497059}
+  - {fileID: 1021520995}
+  - {fileID: 1736442738}
+  - {fileID: 1025362575}
+  - {fileID: 1682313230}
+  - {fileID: 1701301244}
+  minimap: {fileID: 1128716029}
+  minimapBackground: {fileID: 1807446983}
+  sliderMinimap: {fileID: 1104227099}
+  sliderScale: {fileID: 1092297388}
+  sliderSound: {fileID: 1735624134}
+  sliderMusic: {fileID: 1132147565}
+  sliderArrows: {fileID: 2071790515}
+  OnApplyArrowsAlpha:
+    m_PersistentCalls:
+      m_Calls: []
+  OnApplyMinimapAlpha:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
+        m_MethodName: SetMinimapAlpha
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnApplyBarsScale:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
+        m_MethodName: SetBarsScale
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnApplyMusicVolume:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2108070406}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SetMusicVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnApplySoundVolume:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2108070406}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SetSoundVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!4 &502783245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502783243}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &508604264
 GameObject:
   m_ObjectHideFlags: 0
@@ -5589,7 +5725,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &760821420
 GameObject:
@@ -5928,7 +6064,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &794810211
 MonoBehaviour:
@@ -6122,7 +6258,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -6133,7 +6269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -6698,7 +6834,7 @@ Transform:
   - {fileID: 1560488085}
   - {fileID: 1878922465}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &905038369
 GameObject:
@@ -7297,7 +7433,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006854561}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -7856,8 +7992,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: SetConfigurationBarsScale
         m_Mode: 1
         m_Arguments:
@@ -8101,8 +8237,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: SetConfigurationMinimapAlpha
         m_Mode: 1
         m_Arguments:
@@ -8353,8 +8489,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: SetConfigurationMusicVolume
         m_Mode: 1
         m_Arguments:
@@ -8593,7 +8729,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -8604,7 +8740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -9108,7 +9244,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -9119,7 +9255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -9866,7 +10002,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -9877,7 +10013,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -11441,7 +11577,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1525518039
 GameObject:
@@ -11949,7 +12085,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -11960,7 +12096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -12078,7 +12214,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -12721,6 +12857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef224af1f26ce74bba9f49f1b1b416a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockScene: 1
 --- !u!4 &1665678548
 Transform:
   m_ObjectHideFlags: 0
@@ -13092,7 +13229,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1698122090
 MonoBehaviour:
@@ -14060,8 +14197,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: SetConfigurationSoundVolume
         m_Mode: 1
         m_Arguments:
@@ -14432,7 +14569,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -14443,7 +14580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -14801,7 +14938,7 @@ Transform:
   m_Children:
   - {fileID: 190629506}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1801111513
 GameObject:
@@ -15023,7 +15160,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -15034,7 +15171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -15640,7 +15777,7 @@ Transform:
   m_Children:
   - {fileID: 1776642336}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1878922464
 GameObject:
@@ -16585,8 +16722,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 502783244}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: SetConfigurationArrowsAlpha
         m_Mode: 1
         m_Arguments:
@@ -16980,37 +17117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed239532f19f1c246916ea6c22cceaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasMenu: {fileID: 820871004}
-  canvasOptions: {fileID: 1006854563}
-  canvasTitle: {fileID: 972454159}
-  canvasGame: {fileID: 508604266}
-  canvasAndroid: {fileID: 1238223953}
-  canvasLevels: {fileID: 1732572785}
-  canvasControls: {fileID: 1247130458}
-  canvasBars: {fileID: 1137758111}
-  canvasReadme: {fileID: 305229127}
-  minimap: {fileID: 1128716029}
-  minimapBackground: {fileID: 1807446983}
-  sliderMinimap: {fileID: 1104227099}
-  sliderScale: {fileID: 1092297388}
-  sliderSound: {fileID: 1735624134}
-  sliderMusic: {fileID: 1132147565}
-  sliderArrows: {fileID: 1092297388}
   audioMixer: {fileID: 24100000, guid: 585f1e5d87e54e84f82e5587e943034c, type: 2}
-  scenesManager: {fileID: 1665678547}
-  canvasLevelsButtons:
-  - {fileID: 616730181}
-  - {fileID: 1427432932}
-  - {fileID: 376063015}
-  - {fileID: 1859473723}
-  - {fileID: 1265695764}
-  - {fileID: 1852396590}
-  - {fileID: 1790497059}
-  - {fileID: 1021520995}
-  - {fileID: 1736442738}
-  - {fileID: 1025362575}
-  - {fileID: 1682313230}
-  - {fileID: 1701301244}
   backgroundPlane: {fileID: 447192016}
   parallaxManager: {fileID: 1776642341}
   postProcessingManager: {fileID: 1518408288}
@@ -17029,82 +17136,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c28351e0c4218440b97a5b26aa231c1, type: 2}
   - {fileID: 11400000, guid: 95b9e6aa08fbb0d4c9f6a69db1444840, type: 2}
   - {fileID: 11400000, guid: 2614864882d9a004d96ba13e4695b473, type: 2}
-  lockScene: 0
-  OnApplyArrowsAlpha:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetArrowsAlpha
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnApplyMinimapAlpha:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetMinimapAlpha
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnApplyBarsScale:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetBarsScale
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnApplyMusicVolume:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetMusicVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnApplySoundVolume:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2108070406}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSoundVolume
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  runningWindows: 1
 --- !u!4 &2108070407
 Transform:
   m_ObjectHideFlags: 0
@@ -17118,7 +17150,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2108895318
 GameObject:
@@ -17597,7 +17629,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 125, y: -45, z: 0}
 --- !u!114 &2125434035
 MonoBehaviour:
@@ -17650,7 +17682,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -17661,7 +17693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

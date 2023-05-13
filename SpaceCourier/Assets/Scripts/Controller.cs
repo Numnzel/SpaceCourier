@@ -62,8 +62,9 @@ public class Controller : MonoBehaviour {
     public void EnterMenuOrReturn(InputAction.CallbackContext context) {
 
         if (context.started)
-            GameManager.instance.EnterMenuOrReturn();
+            CanvasManager.instance.EnterMenuOrReturn();
     }
+
     public void RestartLevel(InputAction.CallbackContext context) {
 
         if (context.started)

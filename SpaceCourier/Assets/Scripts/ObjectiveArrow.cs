@@ -11,12 +11,12 @@ public class ObjectiveArrow : MonoBehaviour {
 
 	private void OnEnable() {
 
-        GameManager.instance.OnApplyArrowsAlpha.AddListener(ChangeAlpha);
+        CanvasManager.instance.OnApplyArrowsAlpha.AddListener(ChangeAlpha);
     }
 
 	private void OnDisable() {
 
-        GameManager.instance.OnApplyArrowsAlpha.RemoveListener(ChangeAlpha);
+        CanvasManager.instance.OnApplyArrowsAlpha.RemoveListener(ChangeAlpha);
     }
 
 	private void Update() {
