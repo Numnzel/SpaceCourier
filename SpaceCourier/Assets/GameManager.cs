@@ -33,9 +33,8 @@ public class GameManager : MonoBehaviour {
 
         //scenesManager.SetCurrentScene(titleSceneIndex);
         DataManager.InitializePlayerData();
-        DataManager.LoadPlayerData();
-        PlayerData.progression = 99;
-        DataManager.SavePlayerData();
+        CanvasManager.instance.LoadUserConfiguration();
+        Physics.gravity = Vector3.zero;
     }
 
     public void SetSoundVolume(float value) {

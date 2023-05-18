@@ -47,7 +47,6 @@ public class CanvasManager : MonoBehaviour {
 
     private void Start() {
 
-        LoadUserConfiguration();
         ShowCanvasGroup(canvasTitle);
     }
 
@@ -65,7 +64,12 @@ public class CanvasManager : MonoBehaviour {
             ShowCanvasGroup(canvasMenu);
     }
 
-    public void ShowOptions() { ShowCanvasGroup(canvasOptions); }
+    public void ShowOptions() {
+
+        LoadUserConfiguration();
+        ShowCanvasGroup(canvasOptions);
+    }
+
     public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
     public void ShowReadme() { ShowCanvasGroup(canvasReadme); }
     public void ShowControls() { ShowCanvasGroup(canvasControls); }
@@ -123,12 +127,7 @@ public class CanvasManager : MonoBehaviour {
             return;
 
         ApplyConfiguration();
-
-        sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
-        sliderMinimap.value = PlayerData.optionValue_mapAlpha;
-        sliderScale.value = PlayerData.optionValue_uiScale;
-        sliderSound.value = PlayerData.optionValue_sound;
-        sliderMusic.value = PlayerData.optionValue_music;
+        SetConfigurationControls();
     }
 
     public void SaveUserConfiguration() {
@@ -144,6 +143,15 @@ public class CanvasManager : MonoBehaviour {
         OnApplyBarsScale.Invoke(PlayerData.optionValue_uiScale);
         OnApplyMusicVolume.Invoke(PlayerData.optionValue_music);
         OnApplySoundVolume.Invoke(PlayerData.optionValue_sound);
+    }
+
+    private void SetConfigurationControls() {
+
+        sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
+        sliderMinimap.value = PlayerData.optionValue_mapAlpha;
+        sliderScale.value = PlayerData.optionValue_uiScale;
+        sliderSound.value = PlayerData.optionValue_sound;
+        sliderMusic.value = PlayerData.optionValue_music;
     }
 
     public void IsolateCanvasTitle() {
