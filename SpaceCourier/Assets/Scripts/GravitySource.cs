@@ -28,14 +28,18 @@ public class GravitySource : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 
-        if (other.GetComponent<Rigidbody>() && !other.attachedRigidbody.isKinematic)
-            atractedObjects.Add(other.attachedRigidbody);
+        Rigidbody RB = other.attachedRigidbody;
+
+        if (!other.gameObject.isStatic && RB != null && !atractedObjects.Contains(RB))
+            atractedObjects.Add(RB);
 	}
 
 	private void OnTriggerExit(Collider other) {
 
-        if (!other.attachedRigidbody.isKinematic)
-            atractedObjects.Remove(other.attachedRigidbody);
+        Rigidbody RB = other.attachedRigidbody;
+
+		if (RB != null && atractedObjects.Contains(RB))
+            atractedObjects.Remove(RB);
 	}
 
 	private void OnDrawGizmos() {
@@ -61,6 +65,9 @@ public class GravitySource : MonoBehaviour {
     private void Update() {
         
 		foreach (Rigidbody RB in atractedObjects) {
+
+            if (RB == null)
+                return;
 
             float dist = Vector3.Distance(transform.position, RB.position);
             float gForce = (this.RB.mass * RB.mass) / (dist * dist);

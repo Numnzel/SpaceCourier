@@ -1234,7 +1234,7 @@ PrefabInstance:
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2108070406}
+      objectReference: {fileID: 502783244}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1245,7 +1245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Com.Numnzel.Main
+      value: CanvasManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 360382165205993850, guid: 13693a6957b2ca34ab6dd27323df2e88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1579,7 +1579,7 @@ GameObject:
   - component: {fileID: 178786410}
   - component: {fileID: 178786409}
   m_Layer: 0
-  m_Name: CargoText
+  m_Name: Objective1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2792,7 +2792,7 @@ GameObject:
   - component: {fileID: 259325861}
   - component: {fileID: 259325860}
   m_Layer: 0
-  m_Name: CollideText
+  m_Name: Donts1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3038,7 +3038,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 305229125}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -4652,7 +4652,7 @@ GameObject:
   - component: {fileID: 549526448}
   - component: {fileID: 549526447}
   m_Layer: 0
-  m_Name: OxygenText
+  m_Name: Donts2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4729,7 +4729,7 @@ GameObject:
   - component: {fileID: 570894321}
   - component: {fileID: 570894320}
   m_Layer: 0
-  m_Name: GravityText
+  m_Name: Dos1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5336,7 +5336,7 @@ GameObject:
   - component: {fileID: 697475541}
   - component: {fileID: 697475540}
   m_Layer: 0
-  m_Name: PortalText
+  m_Name: Objective2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6925,7 +6925,7 @@ GameObject:
   - component: {fileID: 908042370}
   - component: {fileID: 908042369}
   m_Layer: 0
-  m_Name: ProfitText
+  m_Name: Objective3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14697,7 +14697,7 @@ GameObject:
   - component: {fileID: 1787328049}
   - component: {fileID: 1787328048}
   m_Layer: 0
-  m_Name: EnergyText (1)
+  m_Name: Dos3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17023,7 +17023,7 @@ GameObject:
   - component: {fileID: 2083200966}
   - component: {fileID: 2083200965}
   m_Layer: 0
-  m_Name: EnergyText
+  m_Name: Dos2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

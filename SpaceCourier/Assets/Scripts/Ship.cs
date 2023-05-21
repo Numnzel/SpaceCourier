@@ -15,21 +15,14 @@ public class Ship : MonoBehaviour {
     [SerializeField] private List<GameObject> truckFlamesTurnRight;
     [SerializeField] private List<GameObject> truckFlamesTurnLeft;
     [SerializeField] private Animator animator;
-
+    [SerializeField] private Rigidbody RB;
     public bool dead = false;
     public int loadCount = 1;
     public GameObject truckModel;
     public GameObject[] truckLoad;
 
-    private Rigidbody RB;
-
     const float smallFlameBaseScale = 50.0f;
     const float largeFlameBaseScale = 130.0f;
-
-    void Awake() {
-
-        RB = GetComponent<Rigidbody>();
-    }
 
 	private void Start() {
 
@@ -47,11 +40,9 @@ public class Ship : MonoBehaviour {
 
     private void UpdateShipLoad(int amount) {
 
-		for (int i = truckLoad.Length; i > 0; i--) {
-
+		for (int i = truckLoad.Length; i > 0; i--)
             if (amount < i)
                 truckLoad[i-1].transform.localScale = Vector3.zero;
-        }
 
         RB.mass = 1.0f + (amount * 0.2f);
     }
@@ -87,31 +78,76 @@ public class Ship : MonoBehaviour {
         RB.AddTorque(torque * baseImpulseMultiplier, ForceMode.Force);
 
         // Apply SFX (Flames)
-        SetFlames(usedEForward * dir.y, usedESideward * dir.x);
+        SetFlamesSize(usedEForward * dir.y, usedESideward * dir.x);
     }
 
     public void DisableShip() {
 
         powered.disabled = true;
-        SetFlames(0, 0);
+        SetFlamesSize(0, 0);
         RB.velocity = Vector3.zero;
         RB.isKinematic = true;
     }
 
 	private void OnCollisionEnter(Collision collision) {
 
-        Crash();
+        Crash(collision.collider.transform.position);
         SetDead();
     }
 
-    private void Crash() {
-        
-        if (truckModel)
-            truckModel.transform.localScale = Vector3.zero;
+    private void Crash(Vector3 crashPosition) {
 
+        if (truckModel) {
+
+            List<Transform> allParts = new List<Transform>();
+            GetAllParts(truckModel.transform, ref allParts);
+            ExplodeParts(allParts, crashPosition);
+        }
         powered.RemoveEnergy(100000);
         DisableShip();
+
         // spawn explosion
+    }
+
+    private void GetAllParts(Transform obj, ref List<Transform> allParts) {
+        
+        if (obj == null)
+            return;
+
+        Queue<Transform> queue = new Queue<Transform>();
+        queue.Enqueue(obj);
+
+        while (queue.Count > 0) {
+
+            Transform currentObj = queue.Dequeue();
+            allParts.Add(currentObj);
+
+            foreach (Transform child in currentObj)
+                queue.Enqueue(child);
+        }
+    }
+
+    private void ExplodeParts(List<Transform> parts, Vector3 collisionPos) {
+
+        if (parts == null)
+            return;
+        
+        Rigidbody RB;
+        foreach (Transform part in parts) {
+
+            RB = part.GetComponent<Rigidbody>();
+
+            if (RB == null)
+                continue;
+
+            part.parent = null;
+            RB.useGravity = true;
+            RB.isKinematic = false;
+            // Force = dP^2 * v
+            float force = Mathf.Pow((part.transform.position - collisionPos).magnitude * Random.Range(1.0f, 1.3f), 2) * this.RB.velocity.magnitude;
+            RB.angularVelocity = new Vector3(Random.Range(-force, force), Random.Range(-force, force), Random.Range(-force, force)) * 0.005f;
+            RB.AddExplosionForce(force, collisionPos, 20f);
+        }
     }
 
     private void SetDead() {
@@ -119,7 +155,7 @@ public class Ship : MonoBehaviour {
         dead = true;
     }
 
-    private void SetFlames(float force, float torque) {
+    private void SetFlamesSize(float force, float torque) {
 
         float normalizedForce = Mathf.Clamp(force, -5.0f, 5.0f) / 5.0f; // clamp and normalize force
         float normalizedTorque = Mathf.Clamp(torque, -5.0f, 5.0f) / 5.0f; // clamp and normalize torque
