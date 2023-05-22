@@ -146,7 +146,7 @@ public class Ship : MonoBehaviour {
             // Force = dP^2 * v
             float force = Mathf.Pow((part.transform.position - collisionPos).magnitude * Random.Range(1.0f, 1.3f), 2) * this.RB.velocity.magnitude;
             RB.angularVelocity = new Vector3(Random.Range(-force, force), Random.Range(-force, force), Random.Range(-force, force)) * 0.005f;
-            RB.AddExplosionForce(force, collisionPos, 20f);
+            RB.AddExplosionForce(force * 0.4f, collisionPos, 20f);
         }
     }
 

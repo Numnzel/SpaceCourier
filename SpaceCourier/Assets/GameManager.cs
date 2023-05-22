@@ -33,7 +33,14 @@ public class GameManager : MonoBehaviour {
 
         //scenesManager.SetCurrentScene(titleSceneIndex);
         DataManager.InitializePlayerData();
-        CanvasManager.instance.LoadUserConfiguration();
+
+        // Create a default config file if it does not exist.
+        if (!DataManager.LoadPlayerData()) {
+
+            PlayerData.SetDefaults();
+            DataManager.SavePlayerData();
+        }
+        CanvasManager.instance.ApplyConfiguration();
         Physics.gravity = Vector3.zero;
     }
 
@@ -59,13 +66,16 @@ public class GameManager : MonoBehaviour {
         if (loadingSceneIndex == ScenesManager.titleSceneIndex) {
             ScenesManager.instance.UnloadScene(currentSceneIndex);
             //scenesManager.SetCurrentScene(titleSceneIndex);
+            Controller.instance.RestartCamera();
             CanvasManager.instance.IsolateCanvasTitle();
+            CanvasManager.instance.SetTitleTruck(true);
         }
         else {
             
             if (currentSceneIndex != ScenesManager.titleSceneIndex)
                 ScenesManager.instance.UnloadScene(currentSceneIndex);
-            
+
+            CanvasManager.instance.SetTitleTruck(false);
             SetLevel(level);
             //scenesManager.SetCurrentScene(loadingSceneIndex);
             CanvasManager.instance.SetGameCanvas();

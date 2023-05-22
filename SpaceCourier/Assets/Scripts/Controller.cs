@@ -70,4 +70,9 @@ public class Controller : MonoBehaviour {
         if (context.started)
             GameManager.instance.RestartScene();
     }
+
+    public void RestartCamera() {
+
+        cameraSystem.RestartCamera();
+	}
 }

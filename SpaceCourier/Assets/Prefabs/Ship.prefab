@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6403819698053758605}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -146,7 +146,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6403819699078517482}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -220,8 +220,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 1, z: 6.61}
-  m_Center: {x: 0, y: 0, z: 0.32347798}
+  m_Size: {x: 2, y: 1, z: 6.2}
+  m_Center: {x: 0, y: 0, z: -0.51}
 --- !u!114 &6403819699508734149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1226,6 +1226,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -872750775700581557, guid: 11a58ef04d191e04b97e5730a1c5add4, type: 3}
   m_PrefabInstance: {fileID: 7179498929777350852}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &6682587458733558959
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171474628552854415}
+  serializedVersion: 2
+  m_Mass: 0.2
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!95 &694475969023123982
 Animator:
   serializedVersion: 5
@@ -1247,22 +1263,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!54 &6682587458733558959
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171474628552854415}
-  serializedVersion: 2
-  m_Mass: 0.2
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 2
 --- !u!1 &1197261412564997159 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8304412131014806755, guid: 11a58ef04d191e04b97e5730a1c5add4, type: 3}

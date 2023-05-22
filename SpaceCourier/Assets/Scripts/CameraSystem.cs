@@ -21,4 +21,10 @@ public class CameraSystem : MonoBehaviour {
         if (followed != null)
 		    transform.position = followed.transform.position;
 	}
+
+    public void RestartCamera() {
+
+        followed = null;
+        transform.position = Vector3.zero;
+    }
 }

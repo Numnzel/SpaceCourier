@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 public class CanvasManager : MonoBehaviour {
 
@@ -16,15 +17,27 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasLevels;
     [SerializeField] private CanvasGroup canvasControls;
     [SerializeField] private CanvasGroup canvasReadme;
+    [SerializeField] private CanvasGroup canvasHowToPlay;
+    [SerializeField] private CanvasGroup canvasCredits;
+    [SerializeField] private CanvasGroup canvasChangelog;
     [SerializeField] private RectTransform canvasBars;
     [SerializeField] private Button[] canvasLevelsButtons;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
     [SerializeField] private Slider sliderMinimap;
-    [SerializeField] private Slider sliderScale;
+    [SerializeField] private Slider sliderBars;
     [SerializeField] private Slider sliderSound;
     [SerializeField] private Slider sliderMusic;
     [SerializeField] private Slider sliderArrows;
+    [SerializeField] private Slider sliderProgression;
+    [SerializeField] private TextMeshProUGUI sliderMinimapVal;
+    [SerializeField] private TextMeshProUGUI sliderBarsVal;
+    [SerializeField] private TextMeshProUGUI sliderSoundVal;
+    [SerializeField] private TextMeshProUGUI sliderMusicVal;
+    [SerializeField] private TextMeshProUGUI sliderArrowsVal;
+    [SerializeField] private TextMeshProUGUI sliderProgressionVal;
+    [SerializeField] private TextMeshProUGUI gameVersion;
+    [SerializeField] private GameObject titleTruck;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
     public const int titleSceneIndex = 0;
 
@@ -44,10 +57,11 @@ public class CanvasManager : MonoBehaviour {
             Destroy(gameObject);
     }
 
-
     private void Start() {
 
-        ShowCanvasGroup(canvasTitle);
+        IsolateCanvasTitle();
+        gameVersion.text = Application.version;
+        SetTitleTruck(true);
     }
 
     public void EnterMenuOrReturn() {
@@ -66,16 +80,26 @@ public class CanvasManager : MonoBehaviour {
 
     public void ShowOptions() {
 
-        LoadUserConfiguration();
+        DataManager.LoadPlayerData();
+        SetConfigurationControlsValues();
         ShowCanvasGroup(canvasOptions);
     }
 
     public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
     public void ShowReadme() { ShowCanvasGroup(canvasReadme); }
     public void ShowControls() { ShowCanvasGroup(canvasControls); }
+    public void ShowHowToPlay() { ShowCanvasGroup(canvasHowToPlay); }
+    public void ShowCredits() { ShowCanvasGroup(canvasCredits); }
+    public void ShowChangelog() { ShowCanvasGroup(canvasChangelog); }
     public void ShowLevels() {
 
         DataManager.LoadPlayerData();
+
+        // Set progression bar
+        sliderProgression.value = PlayerData.progression;
+        sliderProgressionVal.text = Mathf.RoundToInt(sliderProgression.value).ToString() + "/12";
+
+        // Set level buttons
         for (int i = 0; i < canvasLevelsButtons.Length; i++)
             canvasLevelsButtons[i].interactable = !(i > PlayerData.progression);
 
@@ -121,22 +145,13 @@ public class CanvasManager : MonoBehaviour {
         }
     }
 
-    public void LoadUserConfiguration() {
-
-        if (!DataManager.LoadPlayerData())
-            return;
-
-        ApplyConfiguration();
-        SetConfigurationControls();
-    }
-
     public void SaveUserConfiguration() {
 
-        ApplyConfiguration();
         DataManager.SavePlayerData();
+        ApplyConfiguration();
     }
 
-    private void ApplyConfiguration() {
+    public void ApplyConfiguration() {
 
         OnApplyArrowsAlpha.Invoke(PlayerData.optionValue_arrowsAlpha);
         OnApplyMinimapAlpha.Invoke(PlayerData.optionValue_mapAlpha);
@@ -145,13 +160,18 @@ public class CanvasManager : MonoBehaviour {
         OnApplySoundVolume.Invoke(PlayerData.optionValue_sound);
     }
 
-    private void SetConfigurationControls() {
+    private void SetConfigurationControlsValues() {
 
         sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
         sliderMinimap.value = PlayerData.optionValue_mapAlpha;
-        sliderScale.value = PlayerData.optionValue_uiScale;
+        sliderBars.value = PlayerData.optionValue_uiScale;
         sliderSound.value = PlayerData.optionValue_sound;
         sliderMusic.value = PlayerData.optionValue_music;
+        SetConfigurationIndicator(sliderArrowsVal, PlayerData.optionValue_arrowsAlpha * 100);
+        SetConfigurationIndicator(sliderMinimapVal, PlayerData.optionValue_mapAlpha * 100);
+        SetConfigurationIndicator(sliderBarsVal, PlayerData.optionValue_uiScale * 50 + 100);
+        SetConfigurationIndicator(sliderSoundVal, PlayerData.optionValue_sound * 100);
+        SetConfigurationIndicator(sliderMusicVal, PlayerData.optionValue_music * 100);
     }
 
     public void IsolateCanvasTitle() {
@@ -165,30 +185,48 @@ public class CanvasManager : MonoBehaviour {
         ShowCanvasGroup(canvasGroup);
     }
 
+    public void SetTitleTruck(bool set) {
+
+        if (set)
+            titleTruck.transform.localScale = new Vector3(100, 100, 100);
+        else
+            titleTruck.transform.localScale = Vector3.zero;
+	}
+
     public void SetConfigurationMinimapAlpha() {
 
         PlayerData.optionValue_mapAlpha = Mathf.Min(sliderMinimap.value, sliderMinimap.maxValue);
+        SetConfigurationIndicator(sliderMinimapVal, PlayerData.optionValue_mapAlpha * 100);
     }
 
     public void SetConfigurationBarsScale() {
 
-        PlayerData.optionValue_uiScale = Mathf.Min(sliderScale.value, sliderScale.maxValue);
+        PlayerData.optionValue_uiScale = Mathf.Min(sliderBars.value, sliderBars.maxValue);
+        SetConfigurationIndicator(sliderBarsVal, PlayerData.optionValue_uiScale * 50 + 100);
     }
 
     public void SetConfigurationSoundVolume() {
 
         PlayerData.optionValue_sound = Mathf.Min(sliderSound.value, sliderSound.maxValue);
+        SetConfigurationIndicator(sliderSoundVal, PlayerData.optionValue_sound * 100);
     }
 
     public void SetConfigurationMusicVolume() {
 
         PlayerData.optionValue_music = Mathf.Min(sliderMusic.value, sliderMusic.maxValue);
+        SetConfigurationIndicator(sliderMusicVal, PlayerData.optionValue_music * 100);
     }
 
     public void SetConfigurationArrowsAlpha() {
 
         PlayerData.optionValue_arrowsAlpha = Mathf.Min(sliderArrows.value, sliderArrows.maxValue);
+        SetConfigurationIndicator(sliderArrowsVal, PlayerData.optionValue_arrowsAlpha * 100);
     }
+
+    private void SetConfigurationIndicator(TextMeshProUGUI text, float value) {
+
+        text.text = Mathf.RoundToInt(value).ToString() + "%";
+	}
 
     public void SetMinimapAlpha(float value) {
 
