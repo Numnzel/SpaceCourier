@@ -4,9 +4,23 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour {
 
+	[SerializeField] private MeshRenderer meshRenderer;
+	private MaterialPropertyBlock materialPropertyBlock;
+
 	private void Awake() {
 
 		InitialInclination();
+		SetShader();
+	}
+
+	private void SetShader() {
+
+		materialPropertyBlock = new MaterialPropertyBlock();
+		meshRenderer.GetPropertyBlock(materialPropertyBlock);
+		int property = Shader.PropertyToID("_Position2D");
+
+		materialPropertyBlock.SetVector(property, new Vector2(transform.position.x, transform.position.y));
+		meshRenderer.SetPropertyBlock(materialPropertyBlock);
 	}
 
 	private void InitialInclination() {

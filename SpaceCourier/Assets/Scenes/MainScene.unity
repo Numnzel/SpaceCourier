@@ -14428,7 +14428,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1518408287}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.055248, y: -26.359259, z: -52.912186}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18732,7 +18732,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792131339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.29772, y: -43.538452, z: -4.556059}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18932,24 +18932,31 @@ MonoBehaviour:
     graphics belong to the \"Joystick Pack\" by Fenerax Studios.\r\n\n\r*** Textures:\r\n\r\n\t-
     Space background textures\n\t\tThese textures belong to the \"SBS Seamless Space
     Backgrounds\" Pack by Screaming Brain Studios.\r\n\n*** Music:\r\n\n\r\t- \"Echoes
-    - HurricaneTurtle.ogg\" by HurricaneTurtle.\n\r\t- \"First Stop - HurricaneTurtle.ogg\"
-    by HurricaneTurtle.\n\r\t- \"Highway - HurricaneTurtle.ogg\" by HurricaneTurtle.\n\r\t-
-    \"Hope - Aries Beats.ogg\" by Aries Beats.\n\r\n*** Scripting:\r\n\r\n\t- General:\r\n\t\tAll
+    - HurricaneTurtle.mp3\" by HurricaneTurtle.\n\r\t- \"First Stop - HurricaneTurtle.mp3\"
+    by HurricaneTurtle.\n\r\t- \"Highway - HurricaneTurtle.mp3\" by HurricaneTurtle.\n\r\t-
+    \"Hope - Aries Beats.mp3\" by Aries Beats.\n\t- \"Hero 80s - AlexiAction.mp3\"
+    by AlexiAction.\n\t- \"My lonely journey - AleXZavesa.mp3\" by AleXZavesa.\n\t-
+    \"Analog dreams synthwave - 23843807.mp3\" by 23843807.\n\t- \"Utopia Cosmic
+    Trance Mix - JuliusH.mp3\" by JuliusH.\n\t- \"Space chillout - penguinmusic.mp3\"
+    by penguinmusic.\n\t- \"Electrode - DSTechnician.mp3\" by DSTechnician.\n\t-
+    \"Robo cop synthwave 100bpm 117s - 23843807.mp3\" by 23843807.\n\t- \"Earthshine
+    - DSTechnician.mp3\" by DSTechnician.\n\r\n*** Scripting:\r\n\r\n\t- General:\r\n\t\tAll
     scripts by Numnzel.\n\r\n*** Game Objects:\r\n\r\n\t- Ship/Truck:\r\n\t\tModel
     Author: Belsel\n\t\tTextures Author: Belsel\n\t\tAnimations Author: Belsel\r\n\r\n\t-
     Cargo Bay:\r\n\t\tModel Author: A.T. Montpart\n\t\tTextures Author: Numnzel\n\t\tAnimations
     Author: Numnzel\r\n\r\n\t- Asteroid:\r\n\t\tModel Author: A.T. Montpart\r\n\t\tTextures
     Author: Numnzel\n\n\t- Planet:\n\t\tModel Author: Numnzel\n\t\tShader Author:
-    Numnzel\n\n\t- Star:\n\t\tModel Author: Numnzel\n\t\tShader Author: Numnzel\n\n\t-
-    Portal:\n\t\tModel Author: A.T. Montpart\n\t\tTextures Author: Numnzel\n\r\n***
-    Packages used:\r\n\n\t- Noisy Nodes by Jimmy Cushnie.\n\t- Input System by Unity.\n\t-
-    2D Sprite by Unity.\n\t- JetBrains Rider Editor by Unity.\n\t- Test Framework
-    by Unity.\n\t- TextMeshPro by Unity.\n\t- Timeline by Unity.\n\t- Toolchain Win
-    Linux x64 by Unity.\n\t- Unity UI by Unity.\n\t- Universal RP by Unity.\n\t-
-    Version Control by Unity.\n\t- Visual Scripting by Unity.\n\t- Visual Studio
-    Code Editor by Unity.\n\t- Visual Studio Editor by Unity.\n\r\n*** Other:\r\n\r\n\t-
-    Ubuntu Font by Dalton Maag.\n\n\t- Special thanks to Belsel who helped me thorough
-    the development of the project.\r"
+    Numnzel\n\n\t- PlanetBig:\n\t\tModel Author: Numnzel\n\t\tShader Author: Numnzel\n\n\t-
+    Star:\n\t\tModel Author: Numnzel\n\t\tShader Author: Numnzel\n\n\t- StarRed:\n\t\tModel
+    Author: Numnzel\n\t\tShader Author: Numnzel\n\n\t- Portal:\n\t\tModel Author:
+    A.T. Montpart\n\t\tTextures Author: Numnzel\n\r\n*** Packages used:\r\n\n\t-
+    Noisy Nodes by Jimmy Cushnie.\n\t- Input System by Unity.\n\t- 2D Sprite by Unity.\n\t-
+    JetBrains Rider Editor by Unity.\n\t- Test Framework by Unity.\n\t- TextMeshPro
+    by Unity.\n\t- Timeline by Unity.\n\t- Toolchain Win Linux x64 by Unity.\n\t-
+    Unity UI by Unity.\n\t- Universal RP by Unity.\n\t- Version Control by Unity.\n\t-
+    Visual Scripting by Unity.\n\t- Visual Studio Code Editor by Unity.\n\t- Visual
+    Studio Editor by Unity.\n\r\n*** Other:\r\n\r\n\t- Ubuntu Font by Dalton Maag.\n\n\t-
+    Special thanks to Belsel who helped me thorough the development of the project.\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -19234,9 +19241,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 424114584}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 24
+  m_MaxValue: 12
   m_WholeNumbers: 1
-  m_Value: 8
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -21842,34 +21849,55 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'v0.9.0-beta
+  m_text: 'v0.9.1-beta
 
-    - Renamed readme to about.
+    - Improved planet texture shader.
+
+    - Added planet
+    shader for differentiating big planets.
+
+    - Improved star texture shader.
+
+    -
+    Added star shader for differentiating big stars.
+
+    - Fixed planet shader
+    bug for real.
+
+    - Small map balancing.
+
+
+    v0.9.0-beta
+
+    - Renamed readme
+    to about.
 
     - Renamed audio files.
 
+    - Added automatic version display.
+
     -
-    Added automatic version display.
+    Added changelog.
 
-    - Added changelog.
-
-    - Added credits
-    list.
+    - Added credits list.
 
     - Added level progression bar.
 
-    - Added options value displays.
+    -
+    Added options value displays.
+
+    - Added truck graphic in the title screen.
 
     -
-    Added truck graphic in the title screen.
+    Removed diverse space package.
 
-    - Removed diverse space package.
+    - Removed unused materials.
 
-    -
-    Removed unused materials.
+    - Fixed
+    a bug with config. values being set to zero at first start.
 
-    - Fixed a bug with config. values being set to
-    zero at first start.'
+    - Fixed truck
+    collision box size and position.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
