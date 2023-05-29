@@ -26,4 +26,8 @@ public static class UIUtils {
 
 		image.color = new Color(image.color.r, image.color.g, image.color.b, Mathf.Clamp01(value));
 	}
+	public static void SetImageAlpha(ref Image image, float value) {
+
+		image.color = new Color(image.color.r, image.color.g, image.color.b, Mathf.Clamp01(value));
+	}
 }

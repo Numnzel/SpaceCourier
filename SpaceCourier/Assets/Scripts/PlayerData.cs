@@ -12,15 +12,19 @@ public static class PlayerData {
     public static float optionValue_mapAlpha;
     public static float optionValue_arrowsAlpha;
     public static float optionValue_uiScale;
+    public static bool optionValue_mutePropulsion;
+    public static bool optionValue_hideRadio;
 
     public static void SetDefaults() {
 
         progression = 0;
         progressionExpert = 0;
         optionValue_sound = 1.0f;
-        optionValue_music = 1.0f;
+        optionValue_music = 0.5f;
         optionValue_mapAlpha = 1.0f;
         optionValue_arrowsAlpha = 1.0f;
         optionValue_uiScale = 1.0f;
+        optionValue_mutePropulsion = false;
+        optionValue_hideRadio = false;
     }
 }

@@ -41,6 +41,8 @@ public static class DataManager {
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_uiScale);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_music);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_sound);
+        binaryFormatter.Serialize(fileStream, PlayerData.optionValue_hideRadio);
+        binaryFormatter.Serialize(fileStream, PlayerData.optionValue_mutePropulsion);
     }
 
     static private void DeserializeAllData(BinaryFormatter binaryFormatter, FileStream fileStream) {
@@ -51,5 +53,7 @@ public static class DataManager {
         PlayerData.optionValue_uiScale = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_music = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_sound = (float)binaryFormatter.Deserialize(fileStream);
+        PlayerData.optionValue_hideRadio = (bool)binaryFormatter.Deserialize(fileStream);
+        PlayerData.optionValue_mutePropulsion = (bool)binaryFormatter.Deserialize(fileStream);
     }
 }

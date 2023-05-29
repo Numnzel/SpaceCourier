@@ -16,10 +16,15 @@ public class Ship : MonoBehaviour {
     [SerializeField] private List<GameObject> truckFlamesTurnLeft;
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody RB;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip soundCrash;
+    [SerializeField] private AudioClip soundPropulsion;
     public bool dead = false;
     public int loadCount = 1;
     public GameObject truckModel;
     public GameObject[] truckLoad;
+    private int usedESidewardMem;
+    private int usedEForwardMem;
 
     const float smallFlameBaseScale = 50.0f;
     const float largeFlameBaseScale = 130.0f;
@@ -79,6 +84,21 @@ public class Ship : MonoBehaviour {
 
         // Apply SFX (Flames)
         SetFlamesSize(usedEForward * dir.y, usedESideward * dir.x);
+
+        // Apply flame sound
+        if ((usedEForward > 0 && usedEForwardMem == 0) || (usedESideward > 0 && usedESidewardMem == 0))
+            audioSource.Stop();
+
+        usedEForwardMem = usedEForward;
+        usedESidewardMem = usedESideward;
+
+        if (audioSource != null && !PlayerData.optionValue_mutePropulsion) {
+            
+            if (usedEForward == 0 && usedESideward == 0)
+                audioSource.Stop();
+            else if (!audioSource.isPlaying)
+                audioSource.PlayOneShot(soundPropulsion, 0.1f);
+        }
     }
 
     public void DisableShip() {
@@ -105,6 +125,13 @@ public class Ship : MonoBehaviour {
         }
         powered.RemoveEnergy(100000);
         DisableShip();
+
+        // play sound
+        if (audioSource != null) {
+
+            audioSource.Stop();
+            audioSource.PlayOneShot(soundCrash);
+        }
 
         // spawn explosion
     }

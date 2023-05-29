@@ -30,6 +30,9 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private Slider sliderMusic;
     [SerializeField] private Slider sliderArrows;
     [SerializeField] private Slider sliderProgression;
+    [SerializeField] private Button buttonMutePropulsion;
+    [SerializeField] private Button buttonHideRadio;
+    [SerializeField] private Button buttonRadio;
     [SerializeField] private TextMeshProUGUI sliderMinimapVal;
     [SerializeField] private TextMeshProUGUI sliderBarsVal;
     [SerializeField] private TextMeshProUGUI sliderSoundVal;
@@ -38,6 +41,9 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI sliderProgressionVal;
     [SerializeField] private TextMeshProUGUI gameVersion;
     [SerializeField] private GameObject titleTruck;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip soundClick1;
+    [SerializeField] private AudioClip soundClick2;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
     public const int titleSceneIndex = 0;
 
@@ -47,6 +53,8 @@ public class CanvasManager : MonoBehaviour {
     public UnityEvent<float> OnApplyBarsScale;
     public UnityEvent<float> OnApplyMusicVolume;
     public UnityEvent<float> OnApplySoundVolume;
+    public UnityEvent<bool> OnApplyMuteTruckPropulsion;
+    public UnityEvent<bool> OnApplyHideRadio;
 
     void Awake() {
 
@@ -81,7 +89,7 @@ public class CanvasManager : MonoBehaviour {
     public void ShowOptions() {
 
         DataManager.LoadPlayerData();
-        SetConfigurationControlsValues();
+        SetCurrentConfigurationControlsValues();
         ShowCanvasGroup(canvasOptions);
     }
 
@@ -118,6 +126,9 @@ public class CanvasManager : MonoBehaviour {
         if (canvasGroup == null)
             return;
 
+        if (canvasGroup != canvasTitle)
+            audioSource.PlayOneShot(soundClick2);
+
         UIUtils.SetCanvasGroup(canvasGroup, true); // show and enable the new canvas group
 
         if (canvasFocus.Count > 0)
@@ -130,6 +141,8 @@ public class CanvasManager : MonoBehaviour {
 
         if (canvasFocus.Count <= 1)
             return;
+
+        audioSource.PlayOneShot(soundClick1);
 
         UIUtils.SetCanvasGroup(canvasFocus.Peek(), false); // hide and disable current focused canvas group
         canvasFocus.Pop(); // remove focus from current canvas
@@ -147,6 +160,8 @@ public class CanvasManager : MonoBehaviour {
 
     public void SaveUserConfiguration() {
 
+        audioSource.PlayOneShot(soundClick2);
+
         DataManager.SavePlayerData();
         ApplyConfiguration();
     }
@@ -158,15 +173,19 @@ public class CanvasManager : MonoBehaviour {
         OnApplyBarsScale.Invoke(PlayerData.optionValue_uiScale);
         OnApplyMusicVolume.Invoke(PlayerData.optionValue_music);
         OnApplySoundVolume.Invoke(PlayerData.optionValue_sound);
+        OnApplyMuteTruckPropulsion.Invoke(PlayerData.optionValue_mutePropulsion);
+        OnApplyHideRadio.Invoke(PlayerData.optionValue_hideRadio);
     }
 
-    private void SetConfigurationControlsValues() {
+    private void SetCurrentConfigurationControlsValues() {
 
         sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
         sliderMinimap.value = PlayerData.optionValue_mapAlpha;
         sliderBars.value = PlayerData.optionValue_uiScale;
         sliderSound.value = PlayerData.optionValue_sound;
         sliderMusic.value = PlayerData.optionValue_music;
+        buttonMutePropulsion.GetComponent<SwitchButton>().SetValue(PlayerData.optionValue_mutePropulsion);
+        buttonHideRadio.GetComponent<SwitchButton>().SetValue(PlayerData.optionValue_hideRadio);
         SetConfigurationIndicator(sliderArrowsVal, PlayerData.optionValue_arrowsAlpha * 100);
         SetConfigurationIndicator(sliderMinimapVal, PlayerData.optionValue_mapAlpha * 100);
         SetConfigurationIndicator(sliderBarsVal, PlayerData.optionValue_uiScale * 50 + 100);
@@ -221,6 +240,29 @@ public class CanvasManager : MonoBehaviour {
 
         PlayerData.optionValue_arrowsAlpha = Mathf.Min(sliderArrows.value, sliderArrows.maxValue);
         SetConfigurationIndicator(sliderArrowsVal, PlayerData.optionValue_arrowsAlpha * 100);
+    }
+
+    public void SetConfigurationHideRadio() {
+
+        SwitchButton button = buttonHideRadio.GetComponent<SwitchButton>();
+        button.SwitchValue();
+        PlayerData.optionValue_hideRadio = button.value;
+    }
+
+    public void SetConfigurationMutePropulsion() {
+
+        SwitchButton button = buttonMutePropulsion.GetComponent<SwitchButton>();
+        button.SwitchValue();
+        PlayerData.optionValue_mutePropulsion = button.value;
+    }
+
+    public void SetRadio(bool value) {
+
+        Image radioImage = buttonRadio.GetComponent<Image>();
+        float alphaValue = value ? 0 : 1.0f;
+
+        buttonRadio.enabled = !value;
+        UIUtils.SetImageAlpha(ref radioImage, alphaValue);
     }
 
     private void SetConfigurationIndicator(TextMeshProUGUI text, float value) {
