@@ -80,7 +80,9 @@ public class GameManager : MonoBehaviour {
             //scenesManager.SetCurrentScene(loadingSceneIndex);
             CanvasManager.instance.SetGameCanvas();
         }
-	}
+
+        ResumeGame();
+    }
 
     private void SetLevel(LevelSO level) {
 
@@ -89,6 +91,7 @@ public class GameManager : MonoBehaviour {
         parallaxManager.parallaxTexture = level.parallaxPlaneTexture;
         parallaxManager.UpdateCopiesTexture();
         postProcessingManager.profile = level.volumeProfile;
+        CanvasManager.instance.StartTimer();
     }
 
     public void RestartScene() {
@@ -107,9 +110,19 @@ public class GameManager : MonoBehaviour {
 
         Debug.Log("COMPLETED LEVEL");
         DataManager.LoadPlayerData();
+        CanvasManager.instance.StopTimer();
         PlayerData.progression = Mathf.Max(PlayerData.progression, currentSceneIndex);
+        SaveLevelTime(currentSceneIndex, CanvasManager.instance.LevelTime);
         DataManager.SavePlayerData();
     }
+
+    private void SaveLevelTime(int level, float time) {
+
+        if (PlayerData.levelTime.ContainsKey(level))
+            PlayerData.levelTime[level] = Mathf.Min(time, PlayerData.levelTime[level]);
+        else
+            PlayerData.levelTime.Add(level, time);
+	}
 
 	public void OpenKofi() {
 
@@ -129,4 +142,14 @@ public class GameManager : MonoBehaviour {
         UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Play");
         #endif
 	}
+
+    public void StopGame() {
+
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame() {
+
+        Time.timeScale = 1;
+    }
 }

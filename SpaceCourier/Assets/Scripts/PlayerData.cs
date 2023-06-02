@@ -14,6 +14,7 @@ public static class PlayerData {
     public static float optionValue_uiScale;
     public static bool optionValue_mutePropulsion;
     public static bool optionValue_hideRadio;
+    public static Dictionary<int, float> levelTime = new Dictionary<int, float>();
 
     public static void SetDefaults() {
 

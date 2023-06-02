@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -43,6 +44,7 @@ public static class DataManager {
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_sound);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_hideRadio);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_mutePropulsion);
+        binaryFormatter.Serialize(fileStream, PlayerData.levelTime);
     }
 
     static private void DeserializeAllData(BinaryFormatter binaryFormatter, FileStream fileStream) {
@@ -55,5 +57,6 @@ public static class DataManager {
         PlayerData.optionValue_sound = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_hideRadio = (bool)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_mutePropulsion = (bool)binaryFormatter.Deserialize(fileStream);
+        PlayerData.levelTime = (Dictionary<int, float>)binaryFormatter.Deserialize(fileStream);
     }
 }

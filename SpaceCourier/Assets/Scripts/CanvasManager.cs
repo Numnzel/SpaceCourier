@@ -21,7 +21,7 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasCredits;
     [SerializeField] private CanvasGroup canvasChangelog;
     [SerializeField] private RectTransform canvasBars;
-    [SerializeField] private Button[] canvasLevelsButtons;
+    [SerializeField] private LevelButton[] canvasLevelsButtons;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
     [SerializeField] private Slider sliderMinimap;
@@ -40,12 +40,15 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI sliderArrowsVal;
     [SerializeField] private TextMeshProUGUI sliderProgressionVal;
     [SerializeField] private TextMeshProUGUI gameVersion;
+    [SerializeField] private TextMeshProUGUI gameTimer;
     [SerializeField] private GameObject titleTruck;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip soundClick1;
     [SerializeField] private AudioClip soundClick2;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
     public const int titleSceneIndex = 0;
+    private Coroutine timeCounter;
+    private float levelTime;
 
     [Header("Option Events")]
     public UnityEvent<float> OnApplyArrowsAlpha;
@@ -56,7 +59,9 @@ public class CanvasManager : MonoBehaviour {
     public UnityEvent<bool> OnApplyMuteTruckPropulsion;
     public UnityEvent<bool> OnApplyHideRadio;
 
-    void Awake() {
+	public float LevelTime { get => levelTime; }
+
+	void Awake() {
 
         if (instance == null) {
             DontDestroyOnLoad(gameObject);
@@ -74,10 +79,16 @@ public class CanvasManager : MonoBehaviour {
 
     public void EnterMenuOrReturn() {
 
-        if (!canvasFocus.Contains(canvasMenu) && !canvasFocus.Contains(canvasTitle))
+        if (!canvasFocus.Contains(canvasMenu) && !canvasFocus.Contains(canvasTitle)) {
+
+            GameManager.instance.StopGame();
             ShowMenu();
-        else
+        }
+        else {
+
+            GameManager.instance.ResumeGame();
             HideCanvasGroup();
+        }
     }
 
     public void ShowMenu() {
@@ -108,8 +119,52 @@ public class CanvasManager : MonoBehaviour {
         sliderProgressionVal.text = Mathf.RoundToInt(sliderProgression.value).ToString() + "/12";
 
         // Set level buttons
-        for (int i = 0; i < canvasLevelsButtons.Length; i++)
-            canvasLevelsButtons[i].interactable = !(i > PlayerData.progression);
+        for (int i = 0; i < canvasLevelsButtons.Length; i++) {
+
+            LevelButton levelButton = canvasLevelsButtons[i];
+
+            if (levelButton == null)
+                continue;
+
+            // Lock button if progression is not enough
+            bool unlocked = PlayerData.progression >= i;
+            levelButton.SetLock(!unlocked);
+            levelButton.GetComponent<Button>().interactable = unlocked;
+
+            // Set current rank
+            int rank = 0;
+            float levelTime = 0;
+            LevelSO levelInfo = GameManager.instance.levels[i+1];
+
+            if (PlayerData.levelTime.ContainsKey(i+1) && PlayerData.levelTime[i+1] > 0) {
+
+                levelTime = Mathf.Floor(PlayerData.levelTime[i+1]);
+
+                if (levelTime <= levelInfo.rankTimes.y)
+                    rank = 3;
+                else if (levelTime <= levelInfo.rankTimes.x)
+                    rank = 2;
+                else
+                    rank = 1;
+
+                // Show current/next times and ranks
+                levelButton.textTimeVal.text = FormatTime(levelTime);
+                levelButton.SetRank(rank);
+
+                switch (rank) {
+                    case 3:
+                        levelButton.textNextVal.text = "";
+                        break;
+                    case 2:
+                        levelButton.textNextVal.text = FormatTime(levelInfo.rankTimes.y);
+                        break;
+                    case 1:
+                    default:
+                        levelButton.textNextVal.text = FormatTime(levelInfo.rankTimes.x);
+                        break;
+                }
+            }
+        }
 
         ShowCanvasGroup(canvasLevels);
     }
@@ -279,5 +334,38 @@ public class CanvasManager : MonoBehaviour {
     public void SetBarsScale(float value) {
 
         UIUtils.SetCanvasScale(canvasBars, value);
+    }
+
+    public void StartTimer() {
+
+        if (timeCounter != null)
+            StopTimer();
+
+        timeCounter = StartCoroutine(CountLevelTime());
+	}
+
+    public void StopTimer() {
+
+        StopCoroutine(timeCounter);
+    }
+
+    private IEnumerator CountLevelTime() {
+
+        float levelTimeMem = Time.time;
+
+        while (true) {
+
+            levelTime = Time.time - levelTimeMem;
+            gameTimer.text = FormatTime(LevelTime);
+            yield return new WaitForSeconds(0.01f);
+        }
+	}
+
+    private string FormatTime(float timeToDisplay) {
+
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+
+        return string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

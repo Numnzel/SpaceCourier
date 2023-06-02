@@ -17,3 +17,4 @@ MonoBehaviour:
   parallaxPlaneTexture: {fileID: 2800000, guid: ac94f67d4341444488f6b37a254807c0, type: 3}
   lightingSettings: {fileID: 0}
   volumeProfile: {fileID: 11400000, guid: 985b5688858a77b4fbfaf4803575abd8, type: 2}
+  rankTimes: {x: 30, y: 20}

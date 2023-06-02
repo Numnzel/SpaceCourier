@@ -11,4 +11,5 @@ public class LevelSO : ScriptableObject {
 	public Texture2D parallaxPlaneTexture;
 	public LightingSettings lightingSettings;
 	public VolumeProfile volumeProfile;
+	public Vector2 rankTimes = new Vector2();
 }
