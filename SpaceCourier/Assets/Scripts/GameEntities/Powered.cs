@@ -22,7 +22,10 @@ public class Powered : MonoBehaviour {
     const int oxygenMaximum = 500;
     const int oxygenEnergyThreshold = 1000;
 
-    private void Start() {
+	public int Energy { get => energy; }
+	public int MaxEnergy { get => maxEnergy; }
+
+	private void Start() {
 
         oxygenAmount = oxygenMaximum;
         passiveConsumptionCR = StartCoroutine(PassiveConsumption());

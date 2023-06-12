@@ -9,6 +9,7 @@ public class CanvasManager : MonoBehaviour {
 
     public static CanvasManager instance;
 
+    [Header("Canvas")]
     [SerializeField] private CanvasGroup canvasMenu;
     [SerializeField] private CanvasGroup canvasOptions;
     [SerializeField] private CanvasGroup canvasTitle;
@@ -20,6 +21,7 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private CanvasGroup canvasHowToPlay;
     [SerializeField] private CanvasGroup canvasCredits;
     [SerializeField] private CanvasGroup canvasChangelog;
+    [SerializeField] private CanvasGroup canvasAchievements;
     [SerializeField] private RectTransform canvasBars;
     [SerializeField] private LevelButton[] canvasLevelsButtons;
     [SerializeField] private RawImage minimap;
@@ -45,10 +47,18 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip soundClick1;
     [SerializeField] private AudioClip soundClick2;
+    [SerializeField] private AudioClip soundAchievementUnlocked;
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
-    public const int titleSceneIndex = 0;
-    private Coroutine timeCounter;
-    private float levelTime;
+
+    [Header("Achievements")]
+    [SerializeField] private GameObject achievementPrefab;
+    [SerializeField] private GameObject achievementContent;
+    [SerializeField] private GameObject achievementPopupPrefab;
+    [SerializeField] private GameObject achievementPopupContent;
+    [SerializeField] private float achievementPopupFadeinDuration;
+    [SerializeField] private float achievementPopupFadeoutDuration;
+    [SerializeField] private float achievementPopupDuration;
+    private List<Achievement> achievementsInDisplay = new List<Achievement>();
 
     [Header("Option Events")]
     public UnityEvent<float> OnApplyArrowsAlpha;
@@ -59,9 +69,13 @@ public class CanvasManager : MonoBehaviour {
     public UnityEvent<bool> OnApplyMuteTruckPropulsion;
     public UnityEvent<bool> OnApplyHideRadio;
 
-	public float LevelTime { get => levelTime; }
+    public const int titleSceneIndex = 0;
 
-	void Awake() {
+    private Coroutine timeCounter;
+    private float levelTime;
+    public float LevelTime { get => levelTime; }
+
+    void Awake() {
 
         if (instance == null) {
             DontDestroyOnLoad(gameObject);
@@ -70,7 +84,12 @@ public class CanvasManager : MonoBehaviour {
             Destroy(gameObject);
     }
 
-    private void Start() {
+	private void OnEnable() {
+
+        AchievementManager.OnAchievementUnlock += (achievement) => StartCoroutine(PopupAchievement(achievement));
+    }
+
+	private void Start() {
 
         IsolateCanvasTitle();
         gameVersion.text = Application.version;
@@ -100,7 +119,7 @@ public class CanvasManager : MonoBehaviour {
     public void ShowOptions() {
 
         DataManager.LoadPlayerData();
-        SetCurrentConfigurationControlsValues();
+        LoadAndSetCurrentConfigurationControlsValues();
         ShowCanvasGroup(canvasOptions);
     }
 
@@ -110,9 +129,21 @@ public class CanvasManager : MonoBehaviour {
     public void ShowHowToPlay() { ShowCanvasGroup(canvasHowToPlay); }
     public void ShowCredits() { ShowCanvasGroup(canvasCredits); }
     public void ShowChangelog() { ShowCanvasGroup(canvasChangelog); }
+    public void ShowAchievements() {
+
+        DataManager.LoadPlayerData();
+        LoadAndDisplayAchievements();
+        ShowCanvasGroup(canvasAchievements);
+    }
+
     public void ShowLevels() {
 
         DataManager.LoadPlayerData();
+        LoadAndSetLevelButtons();
+        ShowCanvasGroup(canvasLevels);
+    }
+
+    private void LoadAndSetLevelButtons() {
 
         // Set progression bar
         sliderProgression.value = PlayerData.progression;
@@ -152,6 +183,7 @@ public class CanvasManager : MonoBehaviour {
                 levelButton.SetRank(rank);
 
                 switch (rank) {
+
                     case 3:
                         levelButton.textNextVal.text = "";
                         break;
@@ -165,8 +197,80 @@ public class CanvasManager : MonoBehaviour {
                 }
             }
         }
+    }
 
-        ShowCanvasGroup(canvasLevels);
+    private void LoadAndDisplayAchievements() {
+
+        foreach (AchievementDisplay achievementDisplay in achievementContent.GetComponentsInChildren<AchievementDisplay>())
+            Destroy(achievementDisplay.gameObject);
+
+        int i = 0;
+		foreach (Achievement achievement in PlayerData.achievements)
+            CreateAchievementDisplay(achievement, achievementPrefab, achievementContent).GetComponent<RectTransform>().position += new Vector3(0, -150f * i++);
+    }
+
+    private AchievementDisplay CreateAchievementDisplay(Achievement achievement, GameObject prefab, GameObject parent) {
+         
+        AchievementDisplay achievementDisplay = Instantiate(prefab, parent.transform).GetComponent<AchievementDisplay>();
+        achievementDisplay.imgIcon.sprite = achievement.icon;
+        achievementDisplay.textName.text = achievement.name;
+        achievementDisplay.textDescription.text = achievement.description;
+
+        Stat achievementStat = PlayerData.InitializeStatistic(achievement.requirement.name);
+        achievementDisplay.slider.SetProgress(achievementStat.value, achievement.requirement.value);
+
+        return achievementDisplay;
+    }
+
+    private IEnumerator PopupAchievement(Achievement achievement) {
+
+        achievementsInDisplay.Add(achievement);
+
+        AchievementDisplay aDisplay = CreateAchievementDisplay(achievement, achievementPopupPrefab, achievementPopupContent);
+        RectTransform rectTransform = aDisplay.GetComponent<RectTransform>();
+        CanvasGroup aGroup = aDisplay.GetComponent<CanvasGroup>();
+
+        rectTransform.position += new Vector3(0, -150f * achievementsInDisplay.Count-1);
+
+        float timeStamp = Time.time + achievementPopupFadeinDuration;
+        float currentAlpha = 0f;
+        float currentScale = 1.5f;
+
+        aGroup.alpha = currentAlpha;
+        rectTransform.localScale = currentScale * Vector3.one;
+
+        audioSource.PlayOneShot(soundAchievementUnlocked);
+
+        while (Time.time < timeStamp) {
+
+            float t = (Time.time - (timeStamp - achievementPopupFadeinDuration)) / achievementPopupFadeinDuration;
+
+            currentScale = Mathf.Lerp(2.0f, 1.0f, t);
+            currentAlpha = Mathf.Lerp(0f, 1.0f, t);
+
+            aGroup.alpha = currentAlpha;
+            rectTransform.localScale = currentScale * Vector3.one;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForSeconds(achievementPopupDuration);
+
+        timeStamp = Time.time + achievementPopupFadeoutDuration;
+
+        while (Time.time < timeStamp) {
+
+            float t = (Time.time - (timeStamp - achievementPopupFadeinDuration)) / achievementPopupFadeinDuration;
+
+            currentAlpha = Mathf.Lerp(1.0f, 0f, t);
+
+            aGroup.alpha = currentAlpha;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        achievementsInDisplay.Remove(achievement);
+        Destroy(aDisplay.gameObject);
     }
 
     public void SetGameCanvas() {
@@ -182,7 +286,7 @@ public class CanvasManager : MonoBehaviour {
             return;
 
         if (canvasGroup != canvasTitle)
-            audioSource.PlayOneShot(soundClick2);
+            PlayButtonSoundOpen();
 
         UIUtils.SetCanvasGroup(canvasGroup, true); // show and enable the new canvas group
 
@@ -197,7 +301,7 @@ public class CanvasManager : MonoBehaviour {
         if (canvasFocus.Count <= 1)
             return;
 
-        audioSource.PlayOneShot(soundClick1);
+        PlayButtonSoundClose();
 
         UIUtils.SetCanvasGroup(canvasFocus.Peek(), false); // hide and disable current focused canvas group
         canvasFocus.Pop(); // remove focus from current canvas
@@ -215,7 +319,7 @@ public class CanvasManager : MonoBehaviour {
 
     public void SaveUserConfiguration() {
 
-        audioSource.PlayOneShot(soundClick2);
+        PlayButtonSoundOpen();
 
         DataManager.SavePlayerData();
         ApplyConfiguration();
@@ -232,7 +336,7 @@ public class CanvasManager : MonoBehaviour {
         OnApplyHideRadio.Invoke(PlayerData.optionValue_hideRadio);
     }
 
-    private void SetCurrentConfigurationControlsValues() {
+    private void LoadAndSetCurrentConfigurationControlsValues() {
 
         sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
         sliderMinimap.value = PlayerData.optionValue_mapAlpha;
@@ -347,6 +451,16 @@ public class CanvasManager : MonoBehaviour {
     public void StopTimer() {
 
         StopCoroutine(timeCounter);
+    }
+
+    public void PlayButtonSoundOpen() {
+
+        audioSource.PlayOneShot(soundClick2);
+    }
+
+    public void PlayButtonSoundClose() {
+
+        audioSource.PlayOneShot(soundClick1);
     }
 
     private IEnumerator CountLevelTime() {

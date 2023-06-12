@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,24 @@ public class MusicManager : MonoBehaviour {
 	private Coroutine musicCoroutine;
 	private float elapsedTime = 0;
 
+	public static Action<string, int> OnTrackEnd;
+
+
+	private List<string> tracksListened = new List<string>();
+
 	private void Start() {
 
 		StartTracks();
+
+		// Make a list of listened tracks from player data
+		if (!PlayerData.achievements.Find(x => x.id == "audio").unlocked)
+			foreach (AudioClip audioTrack in audioList.audioList) {
+
+				string key = "TrackListen" + audioSource.clip.name;
+
+				if (PlayerData.statistics.ContainsKey(key) && PlayerData.statistics[key].value > 0)
+					tracksListened.Add(key);
+			}
 	}
 
 	private IEnumerator PlayTracks() {
@@ -24,8 +40,17 @@ public class MusicManager : MonoBehaviour {
 
 		while (audioList != null && audioList.audioList.Length > 0) {
 
-			if (elapsedTime > audioSource.clip.length)
+			if (elapsedTime > audioSource.clip.length) {
+
+				// Give listen stat if track was not listened and music volume is not zero
+				if (!tracksListened.Contains("TrackListen" + audioSource.clip.name) && audioSource.volume > 0) {
+
+					OnTrackEnd?.Invoke("TrackListen", 1);
+					OnTrackEnd?.Invoke("TrackListen" + audioSource.clip.name, 1);
+				}
+				
 				PlayNextTrack();
+			}
 
 			elapsedTime += Time.deltaTime;
 

@@ -101,6 +101,13 @@ public class GameManager : MonoBehaviour {
         if (currentSceneIndex == ScenesManager.titleSceneIndex || ScenesManager.instance.lockScene)
             return;
 
+        // Remove hardcore level count if not completed
+        if (PlayerData.statistics.ContainsKey("LevelHardcore") && !PlayerData.achievements.Find(x => x.id == "safety").unlocked) {
+
+            PlayerData.statistics["LevelHardcore"].value = 0;
+            DataManager.SavePlayerData();
+        }
+
         LoadLevel(levels[currentSceneIndex]);
     }
 
@@ -108,15 +115,15 @@ public class GameManager : MonoBehaviour {
 
         int currentSceneIndex = ScenesManager.instance.GetCurrentScene().buildIndex;
 
-        Debug.Log("COMPLETED LEVEL");
+        ScenesManager.instance.lockScene = true;
         DataManager.LoadPlayerData();
         CanvasManager.instance.StopTimer();
         PlayerData.progression = Mathf.Max(PlayerData.progression, currentSceneIndex);
-        SaveLevelTime(currentSceneIndex, CanvasManager.instance.LevelTime);
+        UpdateLevelTime(currentSceneIndex, CanvasManager.instance.LevelTime);
         DataManager.SavePlayerData();
     }
 
-    private void SaveLevelTime(int level, float time) {
+    private void UpdateLevelTime(int level, float time) {
 
         if (PlayerData.levelTime.ContainsKey(level))
             PlayerData.levelTime[level] = Mathf.Min(time, PlayerData.levelTime[level]);

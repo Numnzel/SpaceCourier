@@ -44,6 +44,7 @@ public static class DataManager {
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_sound);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_hideRadio);
         binaryFormatter.Serialize(fileStream, PlayerData.optionValue_mutePropulsion);
+        binaryFormatter.Serialize(fileStream, PlayerData.statistics);
         binaryFormatter.Serialize(fileStream, PlayerData.levelTime);
     }
 
@@ -57,6 +58,7 @@ public static class DataManager {
         PlayerData.optionValue_sound = (float)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_hideRadio = (bool)binaryFormatter.Deserialize(fileStream);
         PlayerData.optionValue_mutePropulsion = (bool)binaryFormatter.Deserialize(fileStream);
+        PlayerData.statistics = (Dictionary<string, Stat>)binaryFormatter.Deserialize(fileStream);
         PlayerData.levelTime = (Dictionary<int, float>)binaryFormatter.Deserialize(fileStream);
     }
 }

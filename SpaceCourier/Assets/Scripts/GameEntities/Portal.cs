@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,9 @@ public class Portal : MonoBehaviour {
     private Ship ship;
     private Coroutine endLevelCoroutine;
 
-	private void Start() {
+    public static Action<string, int> OnLevelEnd;
+
+    private void Start() {
 
         CreateShip();
         EnablePortal(false);
@@ -47,7 +50,8 @@ public class Portal : MonoBehaviour {
             SRB.velocity = Vector3.zero;
             SRB.isKinematic = true;
 
-            endLevelCoroutine = StartCoroutine(EndLevel(ship));
+            if (endLevelCoroutine == null)
+                endLevelCoroutine = StartCoroutine(EndLevel(ship));
         }
     }
 
@@ -68,15 +72,29 @@ public class Portal : MonoBehaviour {
     private IEnumerator EndLevel(Ship ship) {
 
         GameManager.instance.SetCompletedLevel();
-        ScenesManager.instance.lockScene = true;
         int counter = 0;
 
         List<MeshRenderer> truckPieces = new List<MeshRenderer>();
 
+        if (!PlayerData.achievements.Find(x => x.id == "rotate").unlocked)
+            OnLevelEnd?.Invoke("Rotation", ship.Rotations);
+
+        // Increase hardcore level amount only if we have no count (0) or we're on the next level of the progression.
+        if (!PlayerData.achievements.Find(x => x.id == "safety").unlocked)
+            if (!PlayerData.statistics.ContainsKey("LevelHardcore") || ScenesManager.instance.GetCurrentScene().buildIndex - 1 == PlayerData.statistics["LevelHardcore"].value)
+                OnLevelEnd?.Invoke("LevelHardcore", 1);
+
         if (ship != null) {
 
+            ship.deathDisabled = true;
             ship.DisableShip();
             truckPieces.AddRange(ship.truckModel.GetComponentsInChildren<MeshRenderer>());
+
+            if (!PlayerData.achievements.Find(x => x.id == "discharge").unlocked && ship.GetComponent<Powered>().Energy == 0)
+                OnLevelEnd?.Invoke("AchievementFullDischarge", 1);
+
+            if (!PlayerData.achievements.Find(x => x.id == "ready").unlocked && ship.GetComponent<Powered>().Energy * 1f / ship.GetComponent<Powered>().MaxEnergy * 1f > 0.95f)
+                OnLevelEnd?.Invoke("AchievementReadyForAnother", 1);
         }
 
         while (++counter < 100) {

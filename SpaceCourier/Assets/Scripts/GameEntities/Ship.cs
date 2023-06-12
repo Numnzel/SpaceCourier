@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,14 +21,22 @@ public class Ship : MonoBehaviour {
     [SerializeField] private AudioClip soundCrash;
     [SerializeField] private AudioClip soundPropulsion;
     public bool dead = false;
+    public bool deathDisabled = false;
     public int loadCount = 1;
     public GameObject truckModel;
     public GameObject[] truckLoad;
     private int usedESidewardMem;
     private int usedEForwardMem;
+    private float currentRotation;
+    private int rotations;
+
+    public static Action<string, int> OnCrash;
+    public static Action<string, int> OnDeath;
 
     const float smallFlameBaseScale = 50.0f;
     const float largeFlameBaseScale = 130.0f;
+
+	public int Rotations { get => rotations; set => rotations = value; }
 
 	private void Start() {
 
@@ -35,13 +44,46 @@ public class Ship : MonoBehaviour {
         CargoBay[] unloaders = FindObjectsOfType<CargoBay>();
         loadCount = unloaders.Length;
         UpdateShipLoad(loadCount);
+
+        // Count full rotations for achievement
+        if (!PlayerData.achievements.Find(x => x.id == "rotate").unlocked)
+            StartCoroutine(CountFullRotation());
     }
 
 	private void Update() {
 
         if (powered.disabled)
             SetDead();
-	}
+    }
+
+    private IEnumerator CountFullRotation() {
+
+        currentRotation = 0;
+
+        if (PlayerData.statistics.ContainsKey("Rotation"))
+            PlayerData.statistics["Rotation"].value = 0;
+
+        DataManager.SavePlayerData();
+
+        while (Rotations < PlayerData.achievements.Find(x => x.id == "rotate").requirement.value) {
+
+            while (Mathf.Abs(currentRotation) < 0.95f) {
+
+                currentRotation = transform.rotation.y;
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            while (Mathf.Abs(currentRotation) > 0.05) {
+
+                currentRotation = transform.rotation.y;
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            Rotations++;
+        }
+    }
 
     private void UpdateShipLoad(int amount) {
 
@@ -102,7 +144,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void DisableShip() {
-
+        
         powered.disabled = true;
         SetFlamesSize(0, 0);
         RB.velocity = Vector3.zero;
@@ -111,17 +153,21 @@ public class Ship : MonoBehaviour {
 
 	private void OnCollisionEnter(Collision collision) {
 
-        Crash(collision.collider.transform.position);
-        SetDead();
+        Crash(collision.collider.transform.position, collision.relativeVelocity.magnitude);
     }
 
-    private void Crash(Vector3 crashPosition) {
+    private void Crash(Vector3 crashPosition, float crashSpeed) {
+        
+        OnCrash?.Invoke("Crash", 1);
+
+        if (!PlayerData.achievements.Find(x => x.id == "summon").unlocked && CanvasManager.instance.LevelTime < 3f)
+            OnCrash?.Invoke("AchievementSummoningSickness", 1);
 
         if (truckModel) {
 
             List<Transform> allParts = new List<Transform>();
             GetAllParts(truckModel.transform, ref allParts);
-            ExplodeParts(allParts, crashPosition);
+            ExplodeParts(allParts, crashPosition, crashSpeed);
         }
         powered.RemoveEnergy(100000);
         DisableShip();
@@ -134,6 +180,7 @@ public class Ship : MonoBehaviour {
         }
 
         // spawn explosion
+        SetDead();
     }
 
     private void GetAllParts(Transform obj, ref List<Transform> allParts) {
@@ -154,7 +201,7 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    private void ExplodeParts(List<Transform> parts, Vector3 collisionPos) {
+    private void ExplodeParts(List<Transform> parts, Vector3 collisionPos, float collisionSpeed) {
 
         if (parts == null)
             return;
@@ -171,15 +218,26 @@ public class Ship : MonoBehaviour {
             RB.useGravity = true;
             RB.isKinematic = false;
             // Force = dP^2 * v
-            float force = Mathf.Pow((part.transform.position - collisionPos).magnitude * Random.Range(1.0f, 1.3f), 2) * this.RB.velocity.magnitude;
-            RB.angularVelocity = new Vector3(Random.Range(-force, force), Random.Range(-force, force), Random.Range(-force, force)) * 0.005f;
+            float force = Mathf.Pow((part.transform.position - collisionPos).magnitude * UnityEngine.Random.Range(1.0f, 1.3f), 2) * (collisionSpeed * 0.25f);
+            RB.angularVelocity = new Vector3(UnityEngine.Random.Range(-force, force), UnityEngine.Random.Range(-force, force), UnityEngine.Random.Range(-force, force)) * 0.005f;
             RB.AddExplosionForce(force * 0.4f, collisionPos, 20f);
         }
     }
 
     private void SetDead() {
 
+        if (deathDisabled)
+            return;
+
         dead = true;
+        OnDeath?.Invoke("Death", 1);
+        
+        // Remove hardcore level count if not completed
+        if (PlayerData.statistics.ContainsKey("LevelHardcore") && !PlayerData.achievements.Find(x => x.id == "safety").unlocked) {
+
+            PlayerData.statistics["LevelHardcore"].value = 0;
+            DataManager.SavePlayerData();
+        }
     }
 
     private void SetFlamesSize(float force, float torque) {
