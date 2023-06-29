@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Level3-3
   m_EditorClassIdentifier: 
   sceneIndex: 11
+  progressRequeriment: 10
+  episode: Episode1
+  title: 3 - 3
   backgroundPlaneTexture: {fileID: 2800000, guid: b2315a5bbe88c8a45bc28acfae578238, type: 3}
   parallaxPlaneTexture: {fileID: 2800000, guid: f96d20edd6d81674d99ca96c364de5b8, type: 3}
   lightingSettings: {fileID: 0}

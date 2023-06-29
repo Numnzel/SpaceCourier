@@ -23,12 +23,12 @@ public class MusicManager : MonoBehaviour {
 		StartTracks();
 
 		// Make a list of listened tracks from player data
-		if (!PlayerData.achievements.Find(x => x.id == "audio").unlocked)
+		if (!GameDataManager.gameData.achievements.Contains("audio"))
 			foreach (AudioClip audioTrack in audioList.audioList) {
 
 				string key = "TrackListen" + audioSource.clip.name;
 
-				if (PlayerData.statistics.ContainsKey(key) && PlayerData.statistics[key].value > 0)
+				if (GameDataManager.gameData.statistics.ContainsKey(key) && GameDataManager.gameData.statistics[key].value > 0)
 					tracksListened.Add(key);
 			}
 	}

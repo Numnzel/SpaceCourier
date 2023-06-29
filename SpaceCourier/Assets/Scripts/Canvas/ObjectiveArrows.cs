@@ -15,4 +15,11 @@ public class ObjectiveArrows : MonoBehaviour {
 
 		return arrow;
 	}
+
+	public void DestroyArrows() {
+
+		foreach (ObjectiveArrow arrow in arrows)
+			if (arrow != null)
+				Destroy(arrow.gameObject);
+	}
 }

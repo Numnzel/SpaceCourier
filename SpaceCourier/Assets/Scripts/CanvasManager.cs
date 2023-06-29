@@ -11,19 +11,13 @@ public class CanvasManager : MonoBehaviour {
 
     [Header("Canvas")]
     [SerializeField] private CanvasGroup canvasMenu;
-    [SerializeField] private CanvasGroup canvasOptions;
     [SerializeField] private CanvasGroup canvasTitle;
     [SerializeField] private CanvasGroup canvasGame;
     [SerializeField] private CanvasGroup canvasAndroid;
     [SerializeField] private CanvasGroup canvasLevels;
-    [SerializeField] private CanvasGroup canvasControls;
-    [SerializeField] private CanvasGroup canvasReadme;
-    [SerializeField] private CanvasGroup canvasHowToPlay;
-    [SerializeField] private CanvasGroup canvasCredits;
-    [SerializeField] private CanvasGroup canvasChangelog;
-    [SerializeField] private CanvasGroup canvasAchievements;
+    [SerializeField] private CanvasGroup canvasLevelsExpert;
     [SerializeField] private RectTransform canvasBars;
-    [SerializeField] private LevelButton[] canvasLevelsButtons;
+    [SerializeField] private LevelButton canvasLevelButtonPrefab;
     [SerializeField] private RawImage minimap;
     [SerializeField] private RawImage minimapBackground;
     [SerializeField] private Slider sliderMinimap;
@@ -31,7 +25,7 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private Slider sliderSound;
     [SerializeField] private Slider sliderMusic;
     [SerializeField] private Slider sliderArrows;
-    [SerializeField] private Slider sliderProgression;
+    [SerializeField] private List<ProgressSlider> slidersProgression;
     [SerializeField] private Button buttonMutePropulsion;
     [SerializeField] private Button buttonHideRadio;
     [SerializeField] private Button buttonRadio;
@@ -40,15 +34,18 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI sliderSoundVal;
     [SerializeField] private TextMeshProUGUI sliderMusicVal;
     [SerializeField] private TextMeshProUGUI sliderArrowsVal;
-    [SerializeField] private TextMeshProUGUI sliderProgressionVal;
     [SerializeField] private TextMeshProUGUI gameVersion;
     [SerializeField] private TextMeshProUGUI gameTimer;
     [SerializeField] private GameObject titleTruck;
+    [SerializeField] private List<Transform> canvasLevelButtonsParent;
+    private Dictionary<string, List<LevelButton>> canvasLevelButtons = new Dictionary<string, List<LevelButton>>();
+    private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
+
+    [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip soundClick1;
     [SerializeField] private AudioClip soundClick2;
     [SerializeField] private AudioClip soundAchievementUnlocked;
-    private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
 
     [Header("Achievements")]
     [SerializeField] private GameObject achievementPrefab;
@@ -116,87 +113,114 @@ public class CanvasManager : MonoBehaviour {
             ShowCanvasGroup(canvasMenu);
     }
 
-    public void ShowOptions() {
+    public void SetCanvasOptions() {
 
-        DataManager.LoadPlayerData();
-        LoadAndSetCurrentConfigurationControlsValues();
-        ShowCanvasGroup(canvasOptions);
+        GameDataManager.LoadGameData();
+        UpdateOptionsControlsValues();
     }
 
-    public void ShowTitle() { ShowCanvasGroup(canvasTitle); }
-    public void ShowReadme() { ShowCanvasGroup(canvasReadme); }
-    public void ShowControls() { ShowCanvasGroup(canvasControls); }
-    public void ShowHowToPlay() { ShowCanvasGroup(canvasHowToPlay); }
-    public void ShowCredits() { ShowCanvasGroup(canvasCredits); }
-    public void ShowChangelog() { ShowCanvasGroup(canvasChangelog); }
-    public void ShowAchievements() {
+    public void SetCanvasAchievements() {
 
-        DataManager.LoadPlayerData();
+        GameDataManager.LoadGameData();
         LoadAndDisplayAchievements();
-        ShowCanvasGroup(canvasAchievements);
     }
 
-    public void ShowLevels() {
+    public void SetCanvasLevels(Episode episode) {
 
-        DataManager.LoadPlayerData();
-        LoadAndSetLevelButtons();
-        ShowCanvasGroup(canvasLevels);
+        GameDataManager.LoadGameData();
+        SetProgressionBar(episode);
+        LoadAndSetLevelButtons(episode);
     }
 
-    private void LoadAndSetLevelButtons() {
+    private void SetProgressionBar(Episode episode) {
 
-        // Set progression bar
-        sliderProgression.value = PlayerData.progression;
-        sliderProgressionVal.text = Mathf.RoundToInt(sliderProgression.value).ToString() + "/12";
+        int value = GameDataManager.gameData.progression[episode.title];
+        int maxValue = GameManager.instance.levels.FindAll(x => x.episode == episode.title).Count;
 
-        // Set level buttons
-        for (int i = 0; i < canvasLevelsButtons.Length; i++) {
+        slidersProgression[episode.id-1].SetProgress(value, maxValue);
+    }
 
-            LevelButton levelButton = canvasLevelsButtons[i];
+    private void LoadAndSetLevelButtons(Episode episode) {
 
-            if (levelButton == null)
-                continue;
+        List<LevelButton> buttons = new List<LevelButton>();
+        List<LevelSO> levels = GameManager.instance.levels.FindAll(x => x.episode == episode.title);
+        const int xoffs = 450;
+        const int yoffs = -150;
+        const int rows = 4;
+        int y = 0;
+        int x = 0;
+
+        // Find existing buttons
+        if (canvasLevelButtons.ContainsKey(episode.title))
+            buttons = canvasLevelButtons[episode.title];
+
+        // Set buttons
+        foreach (LevelSO level in levels) {
+
+            LevelButton button = buttons.Find(x => x.textLevelName.text == level.title);
+
+            if (button == null) {
+
+                button = Instantiate(canvasLevelButtonPrefab, canvasLevelButtonsParent[episode.id - 1]);
+                button.GetComponent<Button>().onClick.AddListener(delegate { GameManager.instance.LoadLevel(level); });
+                buttons.Add(button);
+            }
+            
+            // Set button position
+            button.transform.localPosition = new Vector3(xoffs * x, yoffs * (y % rows), 0);
+
+            y = (++y % rows == 0) ? 0 : y;
+            x = (y == 0) ? ++x : x;
+
+            // Set button info
+            button.textLevelName.text = level.title;
 
             // Lock button if progression is not enough
-            bool unlocked = PlayerData.progression >= i;
-            levelButton.SetLock(!unlocked);
-            levelButton.GetComponent<Button>().interactable = unlocked;
+            bool unlocked = GameDataManager.gameData.progression[episode.title] >= level.progressRequeriment;
+            button.SetLock(!unlocked);
+            button.GetComponent<Button>().interactable = unlocked;
 
             // Set current rank
             int rank = 0;
             float levelTime = 0;
-            LevelSO levelInfo = GameManager.instance.levels[i+1];
+            LevelData levelData = GameDataManager.gameData.levelData.Find(a => a.id == level.sceneIndex);
 
-            if (PlayerData.levelTime.ContainsKey(i+1) && PlayerData.levelTime[i+1] > 0) {
+            if (levelData != null && levelData.time > 0) {
 
-                levelTime = Mathf.Floor(PlayerData.levelTime[i+1]);
+                levelTime = Mathf.Floor(levelData.time);
 
-                if (levelTime <= levelInfo.rankTimes.y)
+                if (levelTime <= level.rankTimes.y)
                     rank = 3;
-                else if (levelTime <= levelInfo.rankTimes.x)
+                else if (levelTime <= level.rankTimes.x)
                     rank = 2;
                 else
                     rank = 1;
 
                 // Show current/next times and ranks
-                levelButton.textTimeVal.text = FormatTime(levelTime);
-                levelButton.SetRank(rank);
+                button.textTimeVal.text = FormatTime(levelTime);
+                button.SetRank(rank);
 
                 switch (rank) {
 
                     case 3:
-                        levelButton.textNextVal.text = "";
+                        button.textNextVal.text = "";
                         break;
                     case 2:
-                        levelButton.textNextVal.text = FormatTime(levelInfo.rankTimes.y);
+                        button.textNextVal.text = FormatTime(level.rankTimes.y);
                         break;
                     case 1:
                     default:
-                        levelButton.textNextVal.text = FormatTime(levelInfo.rankTimes.x);
+                        button.textNextVal.text = FormatTime(level.rankTimes.x);
                         break;
                 }
             }
         }
+
+        // Store buttons
+        if (canvasLevelButtons.ContainsKey(episode.title))
+            canvasLevelButtons[episode.title].AddRange(buttons);
+        else
+            canvasLevelButtons.Add(episode.title, buttons);
     }
 
     private void LoadAndDisplayAchievements() {
@@ -205,7 +229,7 @@ public class CanvasManager : MonoBehaviour {
             Destroy(achievementDisplay.gameObject);
 
         int i = 0;
-		foreach (Achievement achievement in PlayerData.achievements)
+		foreach (Achievement achievement in AchievementManager.instance.achievementList)
             CreateAchievementDisplay(achievement, achievementPrefab, achievementContent).GetComponent<RectTransform>().position += new Vector3(0, -150f * i++);
     }
 
@@ -216,7 +240,7 @@ public class CanvasManager : MonoBehaviour {
         achievementDisplay.textName.text = achievement.name;
         achievementDisplay.textDescription.text = achievement.description;
 
-        Stat achievementStat = PlayerData.InitializeStatistic(achievement.requirement.name);
+        Stat achievementStat = GameDataManager.gameData.InitializeStatistic(achievement.requirement.name);
         achievementDisplay.slider.SetProgress(achievementStat.value, achievement.requirement.value);
 
         return achievementDisplay;
@@ -285,9 +309,6 @@ public class CanvasManager : MonoBehaviour {
         if (canvasGroup == null)
             return;
 
-        if (canvasGroup != canvasTitle)
-            PlayButtonSoundOpen();
-
         UIUtils.SetCanvasGroup(canvasGroup, true); // show and enable the new canvas group
 
         if (canvasFocus.Count > 0)
@@ -300,8 +321,6 @@ public class CanvasManager : MonoBehaviour {
 
         if (canvasFocus.Count <= 1)
             return;
-
-        PlayButtonSoundClose();
 
         UIUtils.SetCanvasGroup(canvasFocus.Peek(), false); // hide and disable current focused canvas group
         canvasFocus.Pop(); // remove focus from current canvas
@@ -317,39 +336,37 @@ public class CanvasManager : MonoBehaviour {
         }
     }
 
-    public void SaveUserConfiguration() {
+    public void ApplyPlayerData() {
 
-        PlayButtonSoundOpen();
-
-        DataManager.SavePlayerData();
-        ApplyConfiguration();
+        PlayerDataManager.WritePlayerData();
+        SetPlayerOptions();
     }
 
-    public void ApplyConfiguration() {
+    public void SetPlayerOptions() {
 
-        OnApplyArrowsAlpha.Invoke(PlayerData.optionValue_arrowsAlpha);
-        OnApplyMinimapAlpha.Invoke(PlayerData.optionValue_mapAlpha);
-        OnApplyBarsScale.Invoke(PlayerData.optionValue_uiScale);
-        OnApplyMusicVolume.Invoke(PlayerData.optionValue_music);
-        OnApplySoundVolume.Invoke(PlayerData.optionValue_sound);
-        OnApplyMuteTruckPropulsion.Invoke(PlayerData.optionValue_mutePropulsion);
-        OnApplyHideRadio.Invoke(PlayerData.optionValue_hideRadio);
+        OnApplyArrowsAlpha.Invoke(PlayerDataManager.playerData.optionValue_arrowsAlpha);
+        OnApplyMinimapAlpha.Invoke(PlayerDataManager.playerData.optionValue_mapAlpha);
+        OnApplyBarsScale.Invoke(PlayerDataManager.playerData.optionValue_uiScale);
+        OnApplyMusicVolume.Invoke(PlayerDataManager.playerData.optionValue_music);
+        OnApplySoundVolume.Invoke(PlayerDataManager.playerData.optionValue_sound);
+        OnApplyMuteTruckPropulsion.Invoke(PlayerDataManager.playerData.optionValue_mutePropulsion);
+        OnApplyHideRadio.Invoke(PlayerDataManager.playerData.optionValue_hideRadio);
     }
 
-    private void LoadAndSetCurrentConfigurationControlsValues() {
+    private void UpdateOptionsControlsValues() {
 
-        sliderArrows.value = PlayerData.optionValue_arrowsAlpha;
-        sliderMinimap.value = PlayerData.optionValue_mapAlpha;
-        sliderBars.value = PlayerData.optionValue_uiScale;
-        sliderSound.value = PlayerData.optionValue_sound;
-        sliderMusic.value = PlayerData.optionValue_music;
-        buttonMutePropulsion.GetComponent<SwitchButton>().SetValue(PlayerData.optionValue_mutePropulsion);
-        buttonHideRadio.GetComponent<SwitchButton>().SetValue(PlayerData.optionValue_hideRadio);
-        SetConfigurationIndicator(sliderArrowsVal, PlayerData.optionValue_arrowsAlpha * 100);
-        SetConfigurationIndicator(sliderMinimapVal, PlayerData.optionValue_mapAlpha * 100);
-        SetConfigurationIndicator(sliderBarsVal, PlayerData.optionValue_uiScale * 50 + 100);
-        SetConfigurationIndicator(sliderSoundVal, PlayerData.optionValue_sound * 100);
-        SetConfigurationIndicator(sliderMusicVal, PlayerData.optionValue_music * 100);
+        sliderArrows.value = PlayerDataManager.playerData.optionValue_arrowsAlpha;
+        sliderMinimap.value = PlayerDataManager.playerData.optionValue_mapAlpha;
+        sliderBars.value = PlayerDataManager.playerData.optionValue_uiScale;
+        sliderSound.value = PlayerDataManager.playerData.optionValue_sound;
+        sliderMusic.value = PlayerDataManager.playerData.optionValue_music;
+        buttonMutePropulsion.GetComponent<SwitchButton>().SetValue(PlayerDataManager.playerData.optionValue_mutePropulsion);
+        buttonHideRadio.GetComponent<SwitchButton>().SetValue(PlayerDataManager.playerData.optionValue_hideRadio);
+        SetConfigurationIndicator(sliderArrowsVal, PlayerDataManager.playerData.optionValue_arrowsAlpha * 100);
+        SetConfigurationIndicator(sliderMinimapVal, PlayerDataManager.playerData.optionValue_mapAlpha * 100);
+        SetConfigurationIndicator(sliderBarsVal, PlayerDataManager.playerData.optionValue_uiScale * 50 + 100);
+        SetConfigurationIndicator(sliderSoundVal, PlayerDataManager.playerData.optionValue_sound * 100);
+        SetConfigurationIndicator(sliderMusicVal, PlayerDataManager.playerData.optionValue_music * 100);
     }
 
     public void IsolateCanvasTitle() {
@@ -373,46 +390,46 @@ public class CanvasManager : MonoBehaviour {
 
     public void SetConfigurationMinimapAlpha() {
 
-        PlayerData.optionValue_mapAlpha = Mathf.Min(sliderMinimap.value, sliderMinimap.maxValue);
-        SetConfigurationIndicator(sliderMinimapVal, PlayerData.optionValue_mapAlpha * 100);
+        PlayerDataManager.playerData.optionValue_mapAlpha = Mathf.Min(sliderMinimap.value, sliderMinimap.maxValue);
+        SetConfigurationIndicator(sliderMinimapVal, PlayerDataManager.playerData.optionValue_mapAlpha * 100);
     }
 
     public void SetConfigurationBarsScale() {
 
-        PlayerData.optionValue_uiScale = Mathf.Min(sliderBars.value, sliderBars.maxValue);
-        SetConfigurationIndicator(sliderBarsVal, PlayerData.optionValue_uiScale * 50 + 100);
+        PlayerDataManager.playerData.optionValue_uiScale = Mathf.Min(sliderBars.value, sliderBars.maxValue);
+        SetConfigurationIndicator(sliderBarsVal, PlayerDataManager.playerData.optionValue_uiScale * 50 + 100);
     }
 
     public void SetConfigurationSoundVolume() {
 
-        PlayerData.optionValue_sound = Mathf.Min(sliderSound.value, sliderSound.maxValue);
-        SetConfigurationIndicator(sliderSoundVal, PlayerData.optionValue_sound * 100);
+        PlayerDataManager.playerData.optionValue_sound = Mathf.Min(sliderSound.value, sliderSound.maxValue);
+        SetConfigurationIndicator(sliderSoundVal, PlayerDataManager.playerData.optionValue_sound * 100);
     }
 
     public void SetConfigurationMusicVolume() {
 
-        PlayerData.optionValue_music = Mathf.Min(sliderMusic.value, sliderMusic.maxValue);
-        SetConfigurationIndicator(sliderMusicVal, PlayerData.optionValue_music * 100);
+        PlayerDataManager.playerData.optionValue_music = Mathf.Min(sliderMusic.value, sliderMusic.maxValue);
+        SetConfigurationIndicator(sliderMusicVal, PlayerDataManager.playerData.optionValue_music * 100);
     }
 
     public void SetConfigurationArrowsAlpha() {
 
-        PlayerData.optionValue_arrowsAlpha = Mathf.Min(sliderArrows.value, sliderArrows.maxValue);
-        SetConfigurationIndicator(sliderArrowsVal, PlayerData.optionValue_arrowsAlpha * 100);
+        PlayerDataManager.playerData.optionValue_arrowsAlpha = Mathf.Min(sliderArrows.value, sliderArrows.maxValue);
+        SetConfigurationIndicator(sliderArrowsVal, PlayerDataManager.playerData.optionValue_arrowsAlpha * 100);
     }
 
     public void SetConfigurationHideRadio() {
 
         SwitchButton button = buttonHideRadio.GetComponent<SwitchButton>();
         button.SwitchValue();
-        PlayerData.optionValue_hideRadio = button.value;
+        PlayerDataManager.playerData.optionValue_hideRadio = button.value;
     }
 
     public void SetConfigurationMutePropulsion() {
 
         SwitchButton button = buttonMutePropulsion.GetComponent<SwitchButton>();
         button.SwitchValue();
-        PlayerData.optionValue_mutePropulsion = button.value;
+        PlayerDataManager.playerData.optionValue_mutePropulsion = button.value;
     }
 
     public void SetRadio(bool value) {

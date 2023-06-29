@@ -15,7 +15,13 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private ParallaxManager parallaxManager;
     [SerializeField] private Volume postProcessingManager;
     public ObjectiveArrows objectiveArrows;
+
+    [Header("Levels")]
+    public LevelSO levelMainScene;
     public List<LevelSO> levels = new List<LevelSO>();
+    public List<Episode> episodes;
+    private LevelSO currentLevel;
+
     public bool runningWindows = Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
 
 	public bool RunningWindows { get => runningWindows; }
@@ -31,17 +37,24 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {
 
-        //scenesManager.SetCurrentScene(titleSceneIndex);
-        DataManager.InitializePlayerData();
-
-        // Create a default config file if it does not exist.
-        if (!DataManager.LoadPlayerData()) {
-
-            PlayerData.SetDefaults();
-            DataManager.SavePlayerData();
-        }
-        CanvasManager.instance.ApplyConfiguration();
         Physics.gravity = Vector3.zero;
+
+        //scenesManager.SetCurrentScene(titleSceneIndex);
+
+        // Create a default game data file if it does not exist.
+        if (!GameDataManager.LoadGameData())
+            GameDataManager.SaveGameData();
+
+        // Initialize progression
+		foreach (Episode episode in episodes)
+            if (!GameDataManager.gameData.progression.ContainsKey(episode.title))
+                GameDataManager.gameData.progression.Add(episode.title, 0);
+
+        GameDataManager.SaveGameData();
+
+        // Apply stored player options.
+        PlayerDataManager.ReadPlayerData();
+        CanvasManager.instance.SetPlayerOptions();
     }
 
     public void SetSoundVolume(float value) {
@@ -60,15 +73,16 @@ public class GameManager : MonoBehaviour {
 
     public void LoadLevel(LevelSO level) {
 
-        int loadingSceneIndex = level.sceneIndex;
         int currentSceneIndex = ScenesManager.instance.GetCurrentScene().buildIndex;
 
-        if (loadingSceneIndex == ScenesManager.titleSceneIndex) {
+        if (level == levelMainScene) {
+
             ScenesManager.instance.UnloadScene(currentSceneIndex);
             //scenesManager.SetCurrentScene(titleSceneIndex);
             Controller.instance.RestartCamera();
             CanvasManager.instance.IsolateCanvasTitle();
             CanvasManager.instance.SetTitleTruck(true);
+            //CanvasManager.instance.ShowCanvasGroup(sceneIndex);
         }
         else {
             
@@ -80,6 +94,8 @@ public class GameManager : MonoBehaviour {
             //scenesManager.SetCurrentScene(loadingSceneIndex);
             CanvasManager.instance.SetGameCanvas();
         }
+
+        currentLevel = level;
 
         ResumeGame();
     }
@@ -96,39 +112,38 @@ public class GameManager : MonoBehaviour {
 
     public void RestartScene() {
 
-        int currentSceneIndex = ScenesManager.instance.GetCurrentScene().buildIndex;
-
-        if (currentSceneIndex == ScenesManager.titleSceneIndex || ScenesManager.instance.lockScene)
+        if (currentLevel == levelMainScene || ScenesManager.instance.lockScene)
             return;
 
         // Remove hardcore level count if not completed
-        if (PlayerData.statistics.ContainsKey("LevelHardcore") && !PlayerData.achievements.Find(x => x.id == "safety").unlocked) {
+        if (GameDataManager.gameData.statistics.ContainsKey("LevelHardcore") && !GameDataManager.gameData.achievements.Contains("safety") && ScenesManager.instance.GetCurrentScene().buildIndex <= 12) {
 
-            PlayerData.statistics["LevelHardcore"].value = 0;
-            DataManager.SavePlayerData();
+            GameDataManager.gameData.statistics["LevelHardcore"].value = 0;
+            GameDataManager.SaveGameData();
         }
 
-        LoadLevel(levels[currentSceneIndex]);
+        LoadLevel(currentLevel);
     }
 
     public void SetCompletedLevel() {
 
-        int currentSceneIndex = ScenesManager.instance.GetCurrentScene().buildIndex;
-
         ScenesManager.instance.lockScene = true;
-        DataManager.LoadPlayerData();
+        GameDataManager.LoadGameData();
         CanvasManager.instance.StopTimer();
-        PlayerData.progression = Mathf.Max(PlayerData.progression, currentSceneIndex);
-        UpdateLevelTime(currentSceneIndex, CanvasManager.instance.LevelTime);
-        DataManager.SavePlayerData();
+        GameDataManager.gameData.progression[currentLevel.episode] = Mathf.Max(GameDataManager.gameData.progression[currentLevel.episode], currentLevel.sceneIndex);
+        UpdateLevelTime(currentLevel.sceneIndex, CanvasManager.instance.LevelTime);
+        GameDataManager.SaveGameData();
     }
 
-    private void UpdateLevelTime(int level, float time) {
+    private void UpdateLevelTime(int sceneIndex, float time) {
 
-        if (PlayerData.levelTime.ContainsKey(level))
-            PlayerData.levelTime[level] = Mathf.Min(time, PlayerData.levelTime[level]);
+        if (GameDataManager.gameData.levelData.Find(x => x.id == sceneIndex) != null) {
+
+            int index = GameDataManager.gameData.levelData.FindIndex(0, x => x.id == sceneIndex);
+            GameDataManager.gameData.levelData[index].time = Mathf.Min(time, GameDataManager.gameData.levelData[index].time);
+        }
         else
-            PlayerData.levelTime.Add(level, time);
+            GameDataManager.gameData.levelData.Add(new LevelData(sceneIndex, time));
 	}
 
 	public void OpenKofi() {

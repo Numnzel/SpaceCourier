@@ -7,6 +7,9 @@ using UnityEngine.Rendering;
 public class LevelSO : ScriptableObject {
 
 	public int sceneIndex;
+	public int progressRequeriment;
+	public string episode;
+	public string title;
 	public Texture2D backgroundPlaneTexture;
 	public Texture2D parallaxPlaneTexture;
 	public LightingSettings lightingSettings;

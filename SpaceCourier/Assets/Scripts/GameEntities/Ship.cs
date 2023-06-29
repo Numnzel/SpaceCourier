@@ -25,10 +25,12 @@ public class Ship : MonoBehaviour {
     public int loadCount = 1;
     public GameObject truckModel;
     public GameObject[] truckLoad;
+    public Portal portal;
     private int usedESidewardMem;
     private int usedEForwardMem;
     private float currentRotation;
-    private int rotations;
+    private int rotationsCount;
+    private ObjectiveArrow arrow;
 
     public static Action<string, int> OnCrash;
     public static Action<string, int> OnDeath;
@@ -36,7 +38,7 @@ public class Ship : MonoBehaviour {
     const float smallFlameBaseScale = 50.0f;
     const float largeFlameBaseScale = 130.0f;
 
-	public int Rotations { get => rotations; set => rotations = value; }
+	public int RotationsCount { get => rotationsCount; set => rotationsCount = value; }
 
 	private void Start() {
 
@@ -46,7 +48,7 @@ public class Ship : MonoBehaviour {
         UpdateShipLoad(loadCount);
 
         // Count full rotations for achievement
-        if (!PlayerData.achievements.Find(x => x.id == "rotate").unlocked)
+        if (!GameDataManager.gameData.achievements.Contains("rotate"))
             StartCoroutine(CountFullRotation());
     }
 
@@ -60,12 +62,12 @@ public class Ship : MonoBehaviour {
 
         currentRotation = 0;
 
-        if (PlayerData.statistics.ContainsKey("Rotation"))
-            PlayerData.statistics["Rotation"].value = 0;
+        if (GameDataManager.gameData.statistics.ContainsKey("Rotation"))
+            GameDataManager.gameData.statistics["Rotation"].value = 0;
 
-        DataManager.SavePlayerData();
+        GameDataManager.SaveGameData();
 
-        while (Rotations < PlayerData.achievements.Find(x => x.id == "rotate").requirement.value) {
+        while (RotationsCount < AchievementManager.instance.achievementList.Find(x => x.id == "rotate").requirement.value) {
 
             while (Mathf.Abs(currentRotation) < 0.95f) {
 
@@ -81,7 +83,7 @@ public class Ship : MonoBehaviour {
                 yield return new WaitForEndOfFrame();
             }
 
-            Rotations++;
+            RotationsCount++;
         }
     }
 
@@ -99,6 +101,9 @@ public class Ship : MonoBehaviour {
         loadCount--;
         truckLoad[loadCount].transform.localScale = Vector3.zero;
         UpdateShipLoad(loadCount);
+
+        if (loadCount == 0 && arrow == null && portal != null)
+            arrow = GameManager.instance.objectiveArrows.CreateArrow(portal.gameObject);
     }
 
 	public void Move(Vector2 dir) {
@@ -134,7 +139,7 @@ public class Ship : MonoBehaviour {
         usedEForwardMem = usedEForward;
         usedESidewardMem = usedESideward;
 
-        if (audioSource != null && !PlayerData.optionValue_mutePropulsion) {
+        if (audioSource != null && !PlayerDataManager.playerData.optionValue_mutePropulsion) {
             
             if (usedEForward == 0 && usedESideward == 0)
                 audioSource.Stop();
@@ -144,11 +149,12 @@ public class Ship : MonoBehaviour {
     }
 
     public void DisableShip() {
-        
+
         powered.disabled = true;
         SetFlamesSize(0, 0);
         RB.velocity = Vector3.zero;
         RB.isKinematic = true;
+        RemoveArrows();
     }
 
 	private void OnCollisionEnter(Collision collision) {
@@ -160,7 +166,7 @@ public class Ship : MonoBehaviour {
         
         OnCrash?.Invoke("Crash", 1);
 
-        if (!PlayerData.achievements.Find(x => x.id == "summon").unlocked && CanvasManager.instance.LevelTime < 3f)
+        if (!GameDataManager.gameData.achievements.Contains("summon") && CanvasManager.instance.LevelTime < 3f)
             OnCrash?.Invoke("AchievementSummoningSickness", 1);
 
         if (truckModel) {
@@ -233,11 +239,13 @@ public class Ship : MonoBehaviour {
         OnDeath?.Invoke("Death", 1);
         
         // Remove hardcore level count if not completed
-        if (PlayerData.statistics.ContainsKey("LevelHardcore") && !PlayerData.achievements.Find(x => x.id == "safety").unlocked) {
+        if (GameDataManager.gameData.statistics.ContainsKey("LevelHardcore") && !GameDataManager.gameData.achievements.Contains("safety") && ScenesManager.instance.GetCurrentScene().buildIndex <= 12) {
 
-            PlayerData.statistics["LevelHardcore"].value = 0;
-            DataManager.SavePlayerData();
+            GameDataManager.gameData.statistics["LevelHardcore"].value = 0;
+            GameDataManager.SaveGameData();
         }
+
+        RemoveArrows();
     }
 
     private void SetFlamesSize(float force, float torque) {
@@ -269,5 +277,10 @@ public class Ship : MonoBehaviour {
         animator.SetFloat("BlendMotorLeftB", Mathf.Max(0, -normalizedTorque));
         animator.SetFloat("BlendMotorRightF", Mathf.Max(0, -normalizedTorque));
         animator.SetFloat("BlendMotorRightB", Mathf.Max(0, normalizedTorque));
+    }
+
+    public void RemoveArrows() {
+
+        GameManager.instance.objectiveArrows.DestroyArrows();
     }
 }

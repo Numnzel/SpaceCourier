@@ -8,6 +8,7 @@ public class LevelButton : MonoBehaviour {
 
 	public TextMeshProUGUI textTimeVal;
 	public TextMeshProUGUI textNextVal;
+	public TextMeshProUGUI textLevelName;
 	[SerializeField] private Image imgStatus;
 	[SerializeField] private Sprite sprLock;
 	[SerializeField] private Sprite sprRankGold;

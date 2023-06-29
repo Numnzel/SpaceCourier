@@ -13,15 +13,12 @@ public class CargoBay : MonoBehaviour {
 
     private bool satisfied = false;
     private MaterialPropertyBlock materialPropertyBlock;
-    ObjectiveArrows arrows;
     ObjectiveArrow arrow;
 
     private void Start() {
 
-        arrows = GameManager.instance.objectiveArrows;
-
         if (arrow == null)
-            arrow = arrows.CreateArrow(this.gameObject);
+            arrow = GameManager.instance.objectiveArrows.CreateArrow(this.gameObject);
     }
 
 	private void OnTriggerEnter(Collider other) {

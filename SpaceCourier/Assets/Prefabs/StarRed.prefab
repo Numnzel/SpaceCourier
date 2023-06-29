@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: luminity
       value: 5.0943446
       objectReference: {fileID: 0}
+    - target: {fileID: 645387594, guid: 949faaafdbe6a534385445f3e78bdc37, type: 3}
+      propertyPath: energyMultiplier
+      value: 3000
+      objectReference: {fileID: 0}
     - target: {fileID: 3125882600763422094, guid: 949faaafdbe6a534385445f3e78bdc37, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

@@ -32,6 +32,7 @@ public class Portal : MonoBehaviour {
         ship.transform.position = transform.position;
         ship.transform.rotation = transform.rotation;
         Controller.instance.SetShip(ship);
+        ship.portal = this;
     }
 
 	private void Update() {
@@ -72,16 +73,16 @@ public class Portal : MonoBehaviour {
     private IEnumerator EndLevel(Ship ship) {
 
         GameManager.instance.SetCompletedLevel();
-        int counter = 0;
+        int animationCounter = 0;
 
         List<MeshRenderer> truckPieces = new List<MeshRenderer>();
 
-        if (!PlayerData.achievements.Find(x => x.id == "rotate").unlocked)
-            OnLevelEnd?.Invoke("Rotation", ship.Rotations);
+        if (!GameDataManager.gameData.achievements.Contains("rotate"))
+            OnLevelEnd?.Invoke("Rotation", ship.RotationsCount);
 
         // Increase hardcore level amount only if we have no count (0) or we're on the next level of the progression.
-        if (!PlayerData.achievements.Find(x => x.id == "safety").unlocked)
-            if (!PlayerData.statistics.ContainsKey("LevelHardcore") || ScenesManager.instance.GetCurrentScene().buildIndex - 1 == PlayerData.statistics["LevelHardcore"].value)
+        if (!GameDataManager.gameData.achievements.Contains("safety") && ScenesManager.instance.GetCurrentScene().buildIndex <= 12)
+            if (!GameDataManager.gameData.statistics.ContainsKey("LevelHardcore") || ScenesManager.instance.GetCurrentScene().buildIndex - 1 == GameDataManager.gameData.statistics["LevelHardcore"].value)
                 OnLevelEnd?.Invoke("LevelHardcore", 1);
 
         if (ship != null) {
@@ -90,20 +91,20 @@ public class Portal : MonoBehaviour {
             ship.DisableShip();
             truckPieces.AddRange(ship.truckModel.GetComponentsInChildren<MeshRenderer>());
 
-            if (!PlayerData.achievements.Find(x => x.id == "discharge").unlocked && ship.GetComponent<Powered>().Energy == 0)
+            if (!GameDataManager.gameData.achievements.Contains("discharge") && ship.GetComponent<Powered>().Energy == 0)
                 OnLevelEnd?.Invoke("AchievementFullDischarge", 1);
 
-            if (!PlayerData.achievements.Find(x => x.id == "ready").unlocked && ship.GetComponent<Powered>().Energy * 1f / ship.GetComponent<Powered>().MaxEnergy * 1f > 0.95f)
+            if (!GameDataManager.gameData.achievements.Contains("ready") && ship.GetComponent<Powered>().Energy * 1f / ship.GetComponent<Powered>().MaxEnergy * 1f > 0.95f)
                 OnLevelEnd?.Invoke("AchievementReadyForAnother", 1);
         }
 
-        while (++counter < 100) {
+        while (++animationCounter < 100) {
 
             yield return new WaitForSeconds(0.05f);
 
             if (ship != null) {
 
-                ship.transform.localScale *= 0.98f;
+                ship.transform.localScale *= 0.97f;
                 Vector3 posD = ship.transform.position - transform.position;
                 ship.transform.position -= posD * 0.02f;
 
@@ -117,7 +118,7 @@ public class Portal : MonoBehaviour {
             }
         }
 
-        GameManager.instance.LoadLevel(GameManager.instance.levels[0]);
+        GameManager.instance.LoadLevel(GameManager.instance.levelMainScene);
         StopCoroutine(endLevelCoroutine);
     }
 }

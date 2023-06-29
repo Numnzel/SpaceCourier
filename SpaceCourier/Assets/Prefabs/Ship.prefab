@@ -257,6 +257,7 @@ MonoBehaviour:
   soundCrash: {fileID: 8300000, guid: dc09648e8f475b84c9546ac71e13d25b, type: 3}
   soundPropulsion: {fileID: 8300000, guid: baeeb22b2746ee941a796a4994c777a3, type: 3}
   dead: 0
+  deathDisabled: 0
   loadCount: 1
   truckModel: {fileID: 8026502971059611029}
   truckLoad:
