@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Level1-4
   m_EditorClassIdentifier: 
   sceneIndex: 4
+  progressReward: 4
   progressRequeriment: 3
   episode: Episode1
   title: 1 - 4

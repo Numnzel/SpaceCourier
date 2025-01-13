@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Level1-3E
   m_EditorClassIdentifier: 
   sceneIndex: 15
-  progressRequeriment: 14
+  progressReward: 3
+  progressRequeriment: 2
   episode: Episode2
   title: 1 - 3E
   backgroundPlaneTexture: {fileID: 2800000, guid: 60772fcf25913e34d94a289263f6d601, type: 3}

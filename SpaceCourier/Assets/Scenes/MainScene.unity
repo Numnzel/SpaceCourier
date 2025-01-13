@@ -22058,14 +22058,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'v0.9.4-beta
+  m_text: 'v0.9.5-beta
 
-    - Added 12 expert levels.
+    - Fixed a bug that made impossible to unlock expert levels.
 
-    - Red Star energy output
-    reduced by 25%.
 
-    - Added objective arrow for exit portal.
+    v0.9.4-beta
+
+    -
+    Added 12 expert levels.
+
+    - Red Star energy output reduced by 25%.
+
+    -
+    Added objective arrow for exit portal.
 
     - Code refactoring.
 

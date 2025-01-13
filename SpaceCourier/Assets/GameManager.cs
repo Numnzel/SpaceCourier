@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour {
         ScenesManager.instance.lockScene = true;
         GameDataManager.LoadGameData();
         CanvasManager.instance.StopTimer();
-        GameDataManager.gameData.progression[currentLevel.episode] = Mathf.Max(GameDataManager.gameData.progression[currentLevel.episode], currentLevel.sceneIndex);
+        GameDataManager.gameData.progression[currentLevel.episode] = Mathf.Max(GameDataManager.gameData.progression[currentLevel.episode], currentLevel.progressReward);
         UpdateLevelTime(currentLevel.sceneIndex, CanvasManager.instance.LevelTime);
         GameDataManager.SaveGameData();
     }
