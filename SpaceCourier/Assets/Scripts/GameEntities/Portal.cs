@@ -48,7 +48,7 @@ public class Portal : MonoBehaviour {
         if (other.TryGetComponent<Ship>(out ship) && !ship.dead && ship.loadCount == 0 && !portalClosed) {
 
             Rigidbody SRB = ship.GetComponent<Rigidbody>();
-            SRB.velocity = Vector3.zero;
+            SRB.linearVelocity = Vector3.zero;
             SRB.isKinematic = true;
 
             if (endLevelCoroutine == null)

@@ -152,7 +152,7 @@ public class Ship : MonoBehaviour {
 
         powered.disabled = true;
         SetFlamesSize(0, 0);
-        RB.velocity = Vector3.zero;
+        RB.linearVelocity = Vector3.zero;
         RB.isKinematic = true;
         RemoveArrows();
     }
