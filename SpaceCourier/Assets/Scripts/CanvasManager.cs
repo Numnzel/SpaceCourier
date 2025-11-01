@@ -37,6 +37,9 @@ public class CanvasManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI gameVersion;
     [SerializeField] private TextMeshProUGUI gameTimer;
     [SerializeField] private GameObject titleTruck;
+    [SerializeField] private Button canvasLevelExpertButton;
+    [SerializeField] private Button canvasLevelSkipButton;
+    [SerializeField] private Button canvasLevelExpertSkipButton;
     [SerializeField] private List<Transform> canvasLevelButtonsParent;
     private Dictionary<string, List<LevelButton>> canvasLevelButtons = new Dictionary<string, List<LevelButton>>();
     private Stack<CanvasGroup> canvasFocus = new Stack<CanvasGroup>();
@@ -132,6 +135,19 @@ public class CanvasManager : MonoBehaviour {
         LoadAndSetLevelButtons(episode);
     }
 
+    private void SetDebuggingObjects() {
+
+        bool debuggingEnabled = true;
+
+        canvasLevelSkipButton.gameObject.SetActive(debuggingEnabled);
+        canvasLevelExpertSkipButton.gameObject.SetActive(debuggingEnabled);
+    }
+
+    public void SkipCurrentLevel(Episode episode) {
+
+        GameManager.instance.SkipCurrentLevel(episode);
+	}
+
     private void SetProgressionBar(Episode episode) {
 
         int value = GameDataManager.gameData.progression[episode.title];
@@ -221,6 +237,21 @@ public class CanvasManager : MonoBehaviour {
             canvasLevelButtons[episode.title].AddRange(buttons);
         else
             canvasLevelButtons.Add(episode.title, buttons);
+    }
+    /// <summary>
+    /// Checks if the requeriments for the given episode are met for showing the button, and then sets the visibility according.
+    /// </summary>
+    /// <param name="episode"></param>
+    public void SetExpertButton(Episode episode) {
+
+        if (canvasLevelExpertButton == null)
+            return;
+
+        int completedLevels = GameDataManager.gameData.progression[episode.title];
+        int episodeLevels = GameManager.instance.levels.FindAll(x => x.episode == episode.title).Count;
+        bool requirement = completedLevels >= episodeLevels;
+
+        canvasLevelExpertButton.gameObject.SetActive(requirement);
     }
 
     private void LoadAndDisplayAchievements() {
@@ -321,7 +352,7 @@ public class CanvasManager : MonoBehaviour {
 
         if (canvasFocus.Count <= 1)
             return;
-
+        
         UIUtils.SetCanvasGroup(canvasFocus.Peek(), false); // hide and disable current focused canvas group
         canvasFocus.Pop(); // remove focus from current canvas
         UIUtils.SetCanvasGroupInteractable(canvasFocus.Peek(), true); // enable previous canvas group

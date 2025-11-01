@@ -115,8 +115,10 @@ public class GameManager : MonoBehaviour {
         if (currentLevel == levelMainScene || ScenesManager.instance.lockScene)
             return;
 
-        // Remove hardcore level count if not completed
-        if (GameDataManager.gameData.statistics.ContainsKey("LevelHardcore") && !GameDataManager.gameData.achievements.Contains("safety") && ScenesManager.instance.GetCurrentScene().buildIndex <= 12) {
+        int episodeLevels = levels.FindAll(x => x.episode == currentLevel.episode).Count;
+
+        // Remove hardcore level count if not completed and we're on a level of episode one
+        if (GameDataManager.gameData.statistics.ContainsKey("LevelHardcore") && !GameDataManager.gameData.achievements.Contains("safety") && ScenesManager.instance.GetCurrentScene().buildIndex <= episodeLevels) {
 
             GameDataManager.gameData.statistics["LevelHardcore"].value = 0;
             GameDataManager.SaveGameData();
@@ -133,6 +135,17 @@ public class GameManager : MonoBehaviour {
         GameDataManager.gameData.progression[currentLevel.episode] = Mathf.Max(GameDataManager.gameData.progression[currentLevel.episode], currentLevel.progressReward);
         UpdateLevelTime(currentLevel.sceneIndex, CanvasManager.instance.LevelTime);
         GameDataManager.SaveGameData();
+    }
+
+    public void SkipCurrentLevel(Episode episode) {
+
+        int episodeLevels = levels.FindAll(x => x.episode == episode.title).Count;
+
+        GameDataManager.LoadGameData();
+        GameDataManager.gameData.progression[episode.title] = Mathf.Min(++GameDataManager.gameData.progression[episode.title], episodeLevels);
+        GameDataManager.SaveGameData();
+        CanvasManager.instance.SetCanvasLevels(episode);
+        CanvasManager.instance.SetExpertButton(episode);
     }
 
     private void UpdateLevelTime(int sceneIndex, float time) {
