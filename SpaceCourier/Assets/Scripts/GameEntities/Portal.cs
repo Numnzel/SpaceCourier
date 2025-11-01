@@ -80,7 +80,7 @@ public class Portal : MonoBehaviour {
         if (!GameDataManager.gameData.achievements.Contains("rotate"))
             OnLevelEnd?.Invoke("Rotation", ship.RotationsCount);
 
-        // Increase hardcore level amount only if we have no count (0) or we're on the next level of the progression.
+        // Increase hardcore level amount only if we don't have the achievement and we're on the first episode
         if (!GameDataManager.gameData.achievements.Contains("safety") && ScenesManager.instance.GetCurrentScene().buildIndex <= 12)
             if (!GameDataManager.gameData.statistics.ContainsKey("LevelHardcore") || ScenesManager.instance.GetCurrentScene().buildIndex - 1 == GameDataManager.gameData.statistics["LevelHardcore"].value)
                 OnLevelEnd?.Invoke("LevelHardcore", 1);
