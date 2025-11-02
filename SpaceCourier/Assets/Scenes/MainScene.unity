@@ -4796,6 +4796,7 @@ MonoBehaviour:
   canvasLevelsExpert: {fileID: 1714575422}
   canvasBars: {fileID: 1137758111}
   canvasLevelButtonPrefab: {fileID: 31735571011646234, guid: 2e5c40e77781b2e48a144ad42e3465b9, type: 3}
+  canvasButtonPrefab: {fileID: 0}
   minimap: {fileID: 1128716029}
   minimapBackground: {fileID: 1807446983}
   sliderMinimap: {fileID: 1104227099}
